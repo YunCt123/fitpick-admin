@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Wallets: React.FC = () => {
+const Transactions: React.FC = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Wallets</h1>
@@ -11,4 +11,4 @@ const Wallets: React.FC = () => {
   );
 };
 
-export default Wallets;
+export default Transactions;
