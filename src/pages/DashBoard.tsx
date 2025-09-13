@@ -10,10 +10,10 @@ export default function DashBoard() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar - Dynamic width based on collapsed state */}
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar - Fixed width */}
       <div className={`flex-shrink-0 transition-all duration-300 ${
-        isSidebarCollapsed ? 'w-20' : 'w-[15%]'
+        isSidebarCollapsed ? 'w-20' : 'w-64'
       }`}>
         <SideBar 
           isCollapsed={isSidebarCollapsed} 
@@ -21,11 +21,9 @@ export default function DashBoard() {
         />
       </div>
 
-      {/* Main Content - Dynamic width */}
-      <div className={`bg-gray-100 transition-all duration-300 ${
-        isSidebarCollapsed ? 'w-[calc(100%-5rem)]' : 'w-[85%]'
-      }`}>
-        <div className="p-8">
+      {/* Main Content - Full remaining width */}
+      <div className="flex-1 bg-gray-100 transition-all duration-300 overflow-auto">
+        <div className="p-6">
           <Outlet />
         </div>
       </div>
