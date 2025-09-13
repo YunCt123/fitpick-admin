@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Users: React.FC = () => {
+const User: React.FC = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">User Management</h1>
@@ -11,4 +11,4 @@ const Users: React.FC = () => {
   );
 };
 
-export default Users;
+export default User;
