@@ -43,9 +43,7 @@ const SideBar: React.FC<SideBarProps> = ({
     { icon: TrendingUp, label: 'Analytics', path: '/dashboard/analytics' },
     { icon: Users, label: 'Users', path: '/dashboard/users' },
     { icon: FileText, label: 'Blogs', path: '/dashboard/blogs' },
-    { icon: Wallet, label: 'Meals', path: '/dashboard/meals' },
     { icon: Wallet, label: 'Transactions', path: '/dashboard/transactions' },
-    
   ];
 
   const isActive = (path: string) => {
@@ -56,37 +54,27 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   return (
-    <div
-      className={`bg-gray-900 h-full shadow-lg transition-[width] duration-300 flex flex-col overflow-hidden ${
-        isCollapsed ? 'w-20' : 'w-64'
-      }`}
-    >
+    <div className="bg-gray-900 h-full shadow-lg transition-all duration-300 flex flex-col w-64">
       {/* Header */}
       <div className="p-4 border-b border-gray-700 relative">
-  <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'} transition-all`}>
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
           <div className={`bg-purple-500 rounded-xl flex items-center justify-center ${
             isCollapsed ? 'w-8 h-8' : 'w-10 h-10'
           }`}>
             <span className={`text-white font-bold ${isCollapsed ? 'text-sm' : 'text-lg'}`}>FP</span>
           </div>
-          <div
-            className={`transition-opacity duration-200 ${
-              isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-            }`}
-          >
-            {!isCollapsed && (
-              <>
-                <h3 className="font-semibold text-white whitespace-nowrap">FitPick Admin</h3>
-                <p className="text-sm text-gray-400">Admin Dashboard</p>
-              </>
-            )}
-          </div>
+          {!isCollapsed && (
+            <div>
+              <h3 className="font-semibold text-white">FitPick Admin</h3>
+              <p className="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+          )}
         </div>
         
         {/* Toggle Button */}
         <button
           onClick={handleToggleCollapse}
-          className="absolute top-1/2 -translate-y-1/2 -right-0 w-6 h-6 rounded-full hover:scale-105 focus:outline-none bg-gray-700 hover:bg-gray-600 flex items-center justify-center transition-colors shadow-lg z-10"
+          className="absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-6 rounded-full hover:scale-105 focus:outline-none bg-gray-700 hover:bg-gray-600 flex items-center justify-center transition-colors shadow-lg z-10"
           title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
         >
           {isCollapsed ? (
@@ -112,8 +100,8 @@ const SideBar: React.FC<SideBarProps> = ({
       )}
 
       {/* Menu Items */}
-      <nav className={`flex-1 px-3 py-2 ${isCollapsed ? 'px-2' : ''}`}>
-        <ul className="space-y-1">
+      <nav className={`flex-1 px-3 py-2`}>
+        <ul className="space-y-2">
           {menuItems.map((item, index) => (
             <li key={index}>
               <Link
@@ -130,13 +118,7 @@ const SideBar: React.FC<SideBarProps> = ({
                 title={isCollapsed ? item.label : ''}
               >
                 <item.icon className="w-5 h-5" />
-                <span
-                  className={`font-medium transition-opacity duration-150 ${
-                    isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-                  }`}
-                >
-                  {!isCollapsed && item.label}
-                </span>
+                {!isCollapsed && <span className="font-medium">{item.label}</span>}
               </Link>
             </li>
           ))}
@@ -156,13 +138,7 @@ const SideBar: React.FC<SideBarProps> = ({
           title={isCollapsed ? 'Logout' : ''}
         >
           <LogOut className="w-5 h-5" />
-          <span
-            className={`font-medium transition-opacity duration-150 ${
-              isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-            }`}
-          >
-            {!isCollapsed && 'Logout'}
-          </span>
+          {!isCollapsed && <span className="font-medium">Logout</span>}
         </a>
       </div>
     </div>
