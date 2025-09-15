@@ -9,6 +9,7 @@ import Blogs from './pages/Blogs';
 import ManageUser from './pages/ManageUser';
 import './App.css';
 import Transactions from './pages/Transactions';
+import Meals from './pages/Meals';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="users" element={<ManageUser />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="blogs" element={<Blogs />} />
+            <Route path="meals" element={<Meals />} />
             <Route path="transactions" element={<Transactions />} />
           </Route>
           

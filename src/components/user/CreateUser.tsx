@@ -46,23 +46,33 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
       
       console.log('Form values received:', values);
       
-      // Prepare the user data according to backend API spec (PascalCase)
+      // Prepare JSON body instead of FormData (backend expects application/json)
+      // Only include numeric / optional fields if user provided them
+      const userData: Record<string, any> = {
+        fullName: values.fullName?.trim(),
+        email: values.email?.trim(),
+        password: values.password,
+        country: values.country?.trim(),
+        city: values.city?.trim(),
+        roleId: values.role,
+      };
 
-      const userData = new FormData();
+      // Append optional numeric fields if defined (avoid sending undefined)
+      const optionalNumericFields = ['gender', 'age', 'height', 'weight'] as const;
+      optionalNumericFields.forEach((field) => {
+        const keyMap: Record<string, string> = {
+          gender: 'genderId',
+          age: 'age',
+          height: 'height',
+          weight: 'weight'
+        };
+        const val = values[field];
+        if (val !== undefined && val !== null && val !== '') {
+          userData[keyMap[field]] = Number(val);
+        }
+      });
 
-      userData.append("fullName", values.fullName);
-      userData.append("email", values.email);
-      userData.append("password", values.password);
-      userData.append("genderId", values.gender.toString());
-      userData.append("age", values.age.toString());
-      userData.append("height", values.height.toString());
-      userData.append("weight", values.weight.toString());
-      userData.append("country", values.country);
-      userData.append("city", values.city);
-      userData.append("roleId", values.role.toString());
-
-      console.log('User data to send:', userData);
-      
+      console.log('User JSON payload to send:', userData);
       await userService.createUser(userData);
       
       toast.success('User created successfully!');
@@ -102,7 +112,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
       open={visible}
       onCancel={handleCancel}
       footer={null}
-      width={600}
+      width={500}
       destroyOnHidden
     >
       <Form
@@ -111,28 +121,25 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
         onFinish={handleSubmit}
         scrollToFirstError
         validateTrigger={['onBlur', 'onChange']}
-        style={{ marginTop: '20px' }}
+        style={{ marginTop: '8px' }}
       >
-        <Row gutter={16}>
-          <Col span={24}>
+        <Row gutter={12}>
+          <Col span={12}>
             <Form.Item
-              label={<span style={{ color: '#000' }}>Full Name <span style={{ color: 'red' }}>*</span></span>}
+              label={<span style={{ color: '#000', fontSize: 12 }}>Full Name <span style={{ color: 'red' }}>*</span></span>}
               name="fullName"
               rules={ValidationRules.fullName}
             >
-              <Input placeholder="Enter full name" size="large" />
+              <Input placeholder="Full name" size="middle" />
             </Form.Item>
           </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={24}>
+          <Col span={12}>
             <Form.Item
-              label={<span style={{ color: '#000' }}>Email <span style={{ color: 'red' }}>*</span></span>}
+              label={<span style={{ color: '#000', fontSize: 12 }}>Email <span style={{ color: 'red' }}>*</span></span>}
               name="email"
               rules={ValidationRules.email}
             >
-              <Input type="email" placeholder="Enter email address" size="large" />
+              <Input type="email" placeholder="Email" size="middle" />
             </Form.Item>
           </Col>
         </Row>
@@ -166,52 +173,49 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
           </Col>
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={12}>
           <Col span={12}>
             <Form.Item
-              label={<span style={{ color: '#000' }}>Country <span style={{ color: 'red' }}>*</span></span>}
+              label={<span style={{ color: '#000', fontSize: 12 }}>Country <span style={{ color: 'red' }}>*</span></span>}
               name="country"
               rules={ValidationRules.location}
             >
-              <Input placeholder="Enter country" size="large" />
+              <Input placeholder="Country" size="middle" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              label={<span style={{ color: '#000' }}>City <span style={{ color: 'red' }}>*</span></span>}
+              label={<span style={{ color: '#000', fontSize: 12 }}>City <span style={{ color: 'red' }}>*</span></span>}
               name="city"
               rules={ValidationRules.location}
             >
-              <Input placeholder="Enter city" size="large" />
+              <Input placeholder="City" size="middle" />
             </Form.Item>
           </Col>
         </Row>
 
-        <Row gutter={16}>
-          <Col span={24}>
+        <Row gutter={12}>
+          <Col span={12}>
             <Form.Item
-              label={<span style={{ color: '#000' }}>Role <span style={{ color: 'red' }}>*</span></span>}
+              label={<span style={{ color: '#000', fontSize: 12 }}>Role <span style={{ color: 'red' }}>*</span></span>}
               name="role"
               rules={[ValidationRules.required('Please select role!')]}
             >
               <Select
-                placeholder="Select role"
-                size="large"
+                placeholder="Role"
+                size="middle"
                 options={FormOptions.role}
               />
             </Form.Item>
           </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={24}>
+          <Col span={12}>
             <Form.Item
-              label={<span style={{ color: '#000' }}>Gender</span>}
+              label={<span style={{ color: '#000', fontSize: 12 }}>Gender</span>}
               name="gender"
             >
               <Select
-                placeholder="Select gender"
-                size="large"
+                placeholder="Gender"
+                size="middle"
                 options={FormOptions.gender}
                 allowClear
               />
@@ -219,20 +223,29 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
           </Col>
         </Row>
 
-        <Row gutter={16}>
-          <Col span={24}>
+        <Row gutter={12}>
+          <Col span={12}>
             <Form.Item
-              label={<span style={{ color: '#000' }}>Age</span>}
+              label={<span style={{ color: '#000', fontSize: 12 }}>Age</span>}
               name="age"
               rules={ValidationRules.age}
             >
               <InputNumber
-                placeholder="Enter age"
-                size="large"
+                placeholder="Age"
+                size="middle"
                 style={{ width: '100%' }}
                 min={1}
                 max={150}
               />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={<span style={{ color: '#000', fontSize: 12 }}>Image URL</span>}
+              name="imageUrl"
+              rules={ValidationRules.url}
+            >
+              <Input placeholder="Image URL" size="middle" />
             </Form.Item>
           </Col>
         </Row>
@@ -270,23 +283,11 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
           </Col>
         </Row>
 
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              label={<span style={{ color: '#000' }}>Image (URL)</span>}
-              name="imageUrl"
-              rules={ValidationRules.url}
-            >
-              <Input placeholder="Enter image URL (optional)" size="large" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16} style={{ marginTop: '10px' }}>
+        <Row gutter={12} style={{ marginTop: '6px' }}>
           <Col span={12}>
             <Button
               block
-              size="large"
+              size="middle"
               onClick={handleCancel}
               style={{
                 backgroundColor: '#f5f5f5',
@@ -302,7 +303,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
               type="primary"
               htmlType="submit"
               block
-              size="large"
+              size="middle"
               loading={loading}
               style={{
                 backgroundColor: '#7C3AED',
