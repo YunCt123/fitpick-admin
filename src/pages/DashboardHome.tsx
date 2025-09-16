@@ -21,13 +21,13 @@ const DashboardHome: React.FC = () => {
         </div>
         <div className="flex items-center gap-2">
           <button
-            className="px-3 py-2 rounded-lg border border-zinc-200 text-sm text-zinc-700 hover:bg-zinc-50"
+            className="px-3 py-2 rounded-lg border border-zinc-200 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer"
             title="Chọn khoảng thời gian"
           >
             Last 14 days
           </button>
           <button
-            className="px-3 py-2 rounded-lg text-sm text-white"
+            className="px-3 py-2 rounded-lg text-sm text-white cursor-pointer"
             style={{ backgroundColor: PRIMARY }}
             title="Xuất báo cáo"
           >
