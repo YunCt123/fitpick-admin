@@ -23,12 +23,12 @@ const EnhancedSectionTitle: React.FC<{
 const RetentionHeatmapSection: React.FC = () => {
     return (
         <div className="bg-white rounded-xl border border-zinc-100 shadow-sm p-4 lg:p-5 mb-6">
-            <EnhancedSectionTitle icon={ShieldCheck} title="Cohort retention (weekly)" />
+            <EnhancedSectionTitle icon={ShieldCheck} title="Tỷ lệ giữ chân (theo tuần)" />
             <div className="overflow-x-auto">
                 <table className="min-w-[640px] w-full border-separate border-spacing-0">
                     <thead>
                         <tr>
-                            <th className="text-left text-xs font-semibold text-zinc-500 py-2 pr-3">Cohort</th>
+                            <th className="text-left text-xs font-semibold text-zinc-500 py-2 pr-3">Tỷ lệ giữ chân tại tuần</th>
                             {Array.from({ length: 8 }).map((_, i) => (
                                 <th key={i} className="text-xs font-semibold text-zinc-500 py-2 px-1 text-center">
                                     W{i}
@@ -56,7 +56,6 @@ const RetentionHeatmapSection: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="mt-2 text-xs text-zinc-500">W0 = tuần onboard. Màu đậm hơn = retention cao hơn.</div>
         </div>
     );
 };

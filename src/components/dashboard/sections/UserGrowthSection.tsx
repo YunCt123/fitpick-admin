@@ -30,9 +30,9 @@ const UserGrowthSection: React.FC = () => {
                         <div key={r.src} className="flex items-center justify-between">
                             <div className="text-sm text-zinc-700">{r.src}</div>
                             <div className="text-sm text-zinc-500">
-                                <span className="mr-3">{r.daily}/day</span>
+                                <span className="mr-3">{r.daily}/ngày</span>
                                 <span className="text-zinc-400">·</span>{" "}
-                                <span className="ml-3">{r.weekly}/week</span>
+                                <span className="ml-3">{r.weekly}/tuần</span>
                             </div>
                         </div>
                     ))}

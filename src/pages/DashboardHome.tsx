@@ -24,14 +24,14 @@ const DashboardHome: React.FC = () => {
             className="px-3 py-2 rounded-lg border border-zinc-200 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer"
             title="Chọn khoảng thời gian"
           >
-            Last 14 days
+            14 ngày trước
           </button>
           <button
             className="px-3 py-2 rounded-lg text-sm text-white cursor-pointer"
             style={{ backgroundColor: PRIMARY }}
             title="Xuất báo cáo"
           >
-            Export
+            Xuất báo cáo
           </button>
         </div>
       </div>

@@ -92,13 +92,13 @@ const KpiCardsSection: React.FC = () => {
                 icon={DollarSign}
             />
             <EnhancedKpiCard
-                title="Plans / day"
+                title="Số kế hoạch / ngày"
                 value={plansPerDay.toLocaleString()}
                 delta={{ value: 4, positive: true }}
                 icon={CalendarCheck}
             />
             <EnhancedKpiCard
-                title="Acceptance rate"
+                title="Tỷ lệ chấp nhận"
                 value={`${acceptRate}%`}
                 delta={{ value: 2, positive: true }}
                 icon={CheckCircle2}

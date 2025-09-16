@@ -71,9 +71,10 @@ const RevenueSystemSection: React.FC = () => {
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-zinc-100 text-xs text-zinc-500">
-                    Dunning: <b>{sre.dunning.failed}</b> thất bại · phục hồi{" "}
-                    <b>{sre.dunning.recovered}</b> · Refund <b>{sre.dunning.refunds}</b> · Chargeback{" "}
-                    <b>{sre.dunning.chargebacks}</b>
+                    Dunning: <b>{sre.dunning.failed}</b> Thất bại · {" "}
+                    <b>{sre.dunning.recovered}</b> Phục hồi · {" "}
+                    <b>{sre.dunning.refunds}</b> Hoàn trả · {" "}
+                    <b>{sre.dunning.chargebacks}</b> Hủy bỏ giao dịch
                 </div>
             </div>
 
