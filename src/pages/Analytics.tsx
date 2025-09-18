@@ -1,69 +1,109 @@
 import React from 'react';
-import { TrendingUp, TrendingDown, Users, Eye, MapPin, Download, Star } from 'lucide-react';
+import { TrendingUp, TrendingDown, Users, Eye } from 'lucide-react';
 
 const Analytics: React.FC = () => {
-  // Sample data for the analytics
+  // Sample data for the analytics - User Overview
   const kpiData = [
     {
-      title: 'Phiên mới',
-      value: '43.20%',
-      color: 'bg-gradient-to-r from-green-400 to-green-600',
+      title: 'Tổng người dùng',
+      value: '12,543',
+      color: 'bg-gradient-to-r from-blue-400 to-blue-600',
       icon: Users,
-      isPercentage: true
+      isPercentage: false
     },
     {
-      title: 'Tỉ lệ thoát',
-      value: '55.45%',
-      color: 'bg-gradient-to-r from-purple-400 to-purple-600',
-      icon: TrendingUp,
-      isPercentage: true
-    },
-    {
-      title: 'Trang/Phiên',
-      value: '3205',
-      color: 'bg-gradient-to-r from-pink-400 to-pink-600',
+      title: 'DAU (Hoạt động hàng ngày)',
+      value: '3,205',
+      color: 'bg-gradient-to-r from-green-400 to-green-600',
       icon: Eye,
       isPercentage: false
     },
     {
-      title: 'Phiên',
-      value: '1502',
-      color: 'bg-gradient-to-r from-orange-400 to-orange-600',
-      icon: Users,
+      title: 'MAU (Hoạt động hàng tháng)', 
+      value: '8,932',
+      color: 'bg-gradient-to-r from-purple-400 to-purple-600',
+      icon: TrendingUp,
       isPercentage: false
+    },
+    {
+      title: 'Tăng trưởng tuần',
+      value: '12.5%',
+      color: 'bg-gradient-to-r from-orange-400 to-orange-600',
+      icon: TrendingUp,
+      isPercentage: true
     }
   ];
 
-  const channelData = [
-    { name: 'Tìm kiếm tự nhiên', value: 8422, color: 'bg-orange-500' },
-    { name: 'Giới thiệu', value: 3214, color: 'bg-pink-500' },
-    { name: 'Khác', value: 923, color: 'bg-blue-500' }
+  const dietData = [
+    { name: 'Keto', value: 3542, percentage: 28, color: 'bg-orange-500' },
+    { name: 'Eat Clean', value: 2814, percentage: 23, color: 'bg-green-500' },
+    { name: 'Chay/Thuần chay', value: 2156, percentage: 17, color: 'bg-emerald-500' },
+    { name: 'Không gluten', value: 1654, percentage: 13, color: 'bg-blue-500' },
+    { name: 'Khác', value: 2377, percentage: 19, color: 'bg-purple-500' }
   ];
 
-  const audienceData = {
-    sessions: 12342,
-    users: 8443,
-    sessionsPercentage: 72,
-    usersPercentage: 28
+  const genderData = {
+    male: 6543,
+    female: 5234,
+    other: 766,
+    malePercentage: 52,
+    femalePercentage: 42,
+    otherPercentage: 6
   };
 
-  const countryData = [
-    { country: 'Mỹ', visits: 4303, percentage: 31.2, trend: 'up' },
-    { country: 'Trung Quốc', visits: 2335, percentage: 15.6, trend: 'up' },
-    { country: 'Úc', visits: 2107, percentage: 14.7, trend: 'up' },
-    { country: 'Đức', visits: 1804, percentage: 12.8, trend: 'down' },
-    { country: 'Canada', visits: 968, percentage: 8.4, trend: 'up' }
+  const ageGroups = [
+    { 
+      name: 'Gen Z (18-25)', 
+      count: 4521, 
+      percentage: 36, 
+      color: 'bg-blue-500',
+      description: 'Thế hệ số hóa, yêu thích công nghệ'
+    },
+    { 
+      name: 'Millennials (26-35)', 
+      count: 5234, 
+      percentage: 42, 
+      color: 'bg-green-500',
+      description: 'Thế hệ Y, quan tâm sức khỏe'
+    },
+    { 
+      name: 'Gen X (36-45)', 
+      count: 2134, 
+      percentage: 17, 
+      color: 'bg-purple-500',
+      description: 'Thế hệ X, có thu nhập ổn định'
+    },
+    { 
+      name: 'Boomers (>45)', 
+      count: 654, 
+      percentage: 5, 
+      color: 'bg-orange-500',
+      description: 'Thế hệ trưởng thành, quan tâm dinh dưỡng'
+    }
+  ];
+
+
+
+  const popularMeals = [
+    { name: 'Salad bơ', orders: 1523, percentage: 18.5, trend: 'up' },
+    { name: 'Gà nướng kiểu Địa Trung Hải', orders: 1342, percentage: 16.3, trend: 'up' },
+    { name: 'Cơm quinoa với rau củ', orders: 1156, percentage: 14.0, trend: 'up' },
+    { name: 'Smoothie xanh detox', orders: 987, percentage: 12.0, trend: 'down' },
+    { name: 'Cá hồi nướng', orders: 834, percentage: 10.1, trend: 'up' },
+    { name: 'Bánh yến mạch', orders: 723, percentage: 8.8, trend: 'up' },
+    { name: 'Súp lơ xanh', orders: 612, percentage: 7.4, trend: 'down' },
+    { name: 'Yogurt Hy Lạp', orders: 445, percentage: 5.4, trend: 'up' }
   ];
 
   return (
-    <div className="h-screen bg-gray-50 p-3 overflow-hidden flex flex-col">
-      <h1 className="text-xl font-bold text-gray-800 mb-3">Bảng điều khiển phân tích</h1>
+    <div className="min-h-screen bg-gray-50 p-3 overflow-y-auto">
+      <h1 className="text-xl font-bold text-gray-800 mb-3">Bảng điều khiển phân tích FitPick</h1>
       
       {/* KPI Cards */}
       <div className="grid grid-cols-4 gap-3 mb-3">
         {kpiData.map((kpi, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-sm p-3 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-2">
+          <div key={index} className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-6">
               <div className={`w-6 h-6 rounded-full ${kpi.color} flex items-center justify-center`}>
                 <kpi.icon className="w-3 h-3 text-white" />
               </div>
@@ -79,179 +119,217 @@ const Analytics: React.FC = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mb-3 flex-1">
-        {/* Audience Metrics */}
-        <div className="bg-white rounded-lg shadow-sm p-3">
-          <h3 className="text-xs font-semibold text-gray-800 mb-2">Thống kê khán giả</h3>
-          <p className="text-xs text-gray-600 mb-2">Đã được xác nhận rằng người đọc sẽ bị phân tâm</p>
-          
-          <div className="relative w-24 h-24 mx-auto mb-2">
-            <div className="w-full h-full rounded-full relative overflow-hidden">
-              <div 
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-400 to-pink-600"
-                style={{
-                  background: `conic-gradient(#ec4899 0% ${audienceData.sessionsPercentage}%, #8b5cf6 ${audienceData.sessionsPercentage}% 100%)`
-                }}
-              ></div>
-              <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-sm font-bold text-pink-500">{audienceData.sessionsPercentage}%</div>
-                  <div className="text-sm font-bold text-purple-500">{audienceData.usersPercentage}%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 rounded-full bg-pink-500"></div>
-                <span className="text-xs text-gray-600">Phiên</span>
-              </div>
-              <span className="text-xs font-semibold text-gray-800">{audienceData.sessions.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                <span className="text-xs text-gray-600">Người dùng</span>
-              </div>
-              <span className="text-xs font-semibold text-gray-800">{audienceData.users.toLocaleString()}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Sessions by Channel */}
-        <div className="bg-white rounded-lg shadow-sm p-3">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xs font-semibold text-gray-800">Phiên theo kênh</h3>
-            <select className="text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
-              <option>Hàng tuần</option>
-              <option>Hàng tháng</option>
-              <option>Hàng năm</option>
+      {/* Charts Section - Top */}
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        {/* Gender & Age Demographics - Expanded */}
+        <div className="bg-white rounded-lg shadow-sm p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Phân nhóm người dùng</h3>
+            <select className="text-sm border border-gray-200 rounded px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <option>Tháng này</option>
+              <option>Quý này</option>
+              <option>Năm nay</option>
             </select>
           </div>
 
-          {/* Chart area - simplified representation */}
-          <div className="h-24 mb-2 relative">
-            <svg className="w-full h-full" viewBox="0 0 400 90">
-              {/* Chart lines */}
-              <polyline
-                fill="none"
-                stroke="#f97316"
-                strokeWidth="2"
-                points="50,70 80,50 120,60 160,40 200,50 240,60 280,45 320,55 350,60"
-              />
-              <polyline
-                fill="none"
-                stroke="#ec4899"
-                strokeWidth="2"
-                points="50,75 80,70 120,65 160,55 200,60 240,50 280,55 320,45 350,50"
-              />
-              <polyline
-                fill="none"
-                stroke="#3b82f6"
-                strokeWidth="2"
-                points="50,80 80,78 120,75 160,73 200,70 240,75 280,73 320,70 350,73"
-              />
-              
-              {/* Days labels */}
-              <text x="80" y="87" className="text-xs fill-gray-500">T2</text>
-              <text x="120" y="87" className="text-xs fill-gray-500">T3</text>
-              <text x="160" y="87" className="text-xs fill-gray-500">T4</text>
-              <text x="200" y="87" className="text-xs fill-gray-500">T5</text>
-              <text x="240" y="87" className="text-xs fill-gray-500">T6</text>
-              <text x="280" y="87" className="text-xs fill-gray-500">T7</text>
-              <text x="320" y="87" className="text-xs fill-gray-500">CN</text>
-            </svg>
-          </div>
-
-          <div className="space-y-1">
-            {channelData.map((channel, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center space-x-1">
-                  <div className={`w-2 h-2 rounded-full ${channel.color}`}></div>
-                  <span className="text-xs text-gray-600">{channel.name}</span>
-                </div>
-                <span className="text-xs font-semibold text-gray-800">{channel.value.toLocaleString()}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Visitor's Locations */}
-        <div className="bg-white rounded-lg shadow-sm p-3">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xs font-semibold text-gray-800">Vị trí khách</h3>
-            <select className="text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
-              <option>Hàng tuần</option>
-              <option>Hàng tháng</option>
-              <option>Hàng năm</option>
-            </select>
-          </div>
-
-          {/* World Map Placeholder */}
-          <div className="h-16 bg-gradient-to-br from-purple-100 to-blue-100 rounded mb-2 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-400 via-blue-400 to-purple-600 opacity-20"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <MapPin className="w-4 h-4 text-purple-600" />
-            </div>
-          </div>
-
-          <div className="text-center mb-2">
-            <div className="text-sm font-bold text-gray-800">12,883</div>
-            <div className="text-xs text-gray-500">Lượt truy cập theo quốc gia</div>
-          </div>
-
-          <div className="space-y-1">
-            {countryData.map((country, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center space-x-1">
-                  <span className="text-xs text-gray-700 font-medium">{country.country}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <span className="text-xs text-gray-600">{country.visits.toLocaleString()}</span>
-                  <div className="flex items-center space-x-1">
-                    <span className="text-xs text-gray-500">{country.percentage}%</span>
-                    {country.trend === 'up' ? (
-                      <TrendingUp className="w-3 h-3 text-green-500" />
-                    ) : (
-                      <TrendingDown className="w-3 h-3 text-red-500" />
-                    )}
+          {/* Gender Chart with Absolute Info */}
+          <div className="relative mb-5">
+            {/* Gender Chart - Centered */}
+            <div className="relative w-56 h-56 mx-auto">
+              <div className="w-full h-full rounded-full relative overflow-hidden">
+                <div 
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `conic-gradient(#3b82f6 0% ${genderData.malePercentage}%, #ec4899 ${genderData.malePercentage}% ${genderData.malePercentage + genderData.femalePercentage}%, #8b5cf6 ${genderData.malePercentage + genderData.femalePercentage}% 100%)`
+                  }}
+                ></div>
+                <div className="absolute inset-6 bg-white rounded-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-sm font-bold text-gray-700">Giới tính</div>
+                    <div className="text-xs text-gray-500">{(genderData.male + genderData.female + genderData.other).toLocaleString()}</div>
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Absolute Positioned Gender Info - Right Side */}
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 space-y-2">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className="text-sm text-gray-700">Nam</span>
+                <span className="text-sm font-bold text-gray-800">{genderData.malePercentage}%</span>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 rounded-full bg-pink-500"></div>
+                <span className="text-sm text-gray-700">Nữ</span>
+                <span className="text-sm font-bold text-gray-800">{genderData.femalePercentage}%</span>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                <span className="text-sm text-gray-700">Khác</span>
+                <span className="text-sm font-bold text-gray-800">{genderData.otherPercentage}%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Age Groups Section */}
+            <h4 className="text-sm font-semibold text-gray-700 mb-4">Phân bố theo thế hệ:</h4>
+            <div className="space-y-3">
+              {ageGroups.map((group, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-4 h-4 rounded-full ${group.color}`}></div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-700">{group.name}</span>
+                        <p className="text-xs text-gray-500">{group.description}</p>
+                      </div>
+                    </div>
+                    <span className="text-sm font-bold text-gray-800">{group.percentage}%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
+                      <div 
+                        className={`h-2 rounded-full ${group.color}`}
+                        style={{ width: `${group.percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-gray-600 min-w-fit">{group.count.toLocaleString()} người</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          {/* Summary Stats */}
+          <div className="mt-4 pt-4 border-t">
+            <div className="text-center">
+              <div className="text-sm text-gray-600">Nhóm tuổi phổ biến nhất</div>
+              <div className="text-lg font-bold text-green-600">Millennials (42%)</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Diet Preferences - Expanded */}
+        <div className="bg-white rounded-lg shadow-sm p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Xu hướng chế độ ăn</h3>
+            <select className="text-sm border border-gray-200 rounded px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <option>Tháng này</option>
+              <option>Quý này</option>
+              <option>Năm nay</option>
+            </select>
+          </div>
+
+          {/* Pie Chart representation - Larger */}
+          <div className="relative w-60 h-60 mx-auto mb-5">
+            <div className="w-full h-full rounded-full relative overflow-hidden">
+              <div 
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `conic-gradient(
+                    #f97316 0% 28%, 
+                    #10b981 28% 51%, 
+                    #059669 51% 68%, 
+                    #3b82f6 68% 81%, 
+                    #8b5cf6 81% 100%
+                  )`
+                }}
+              ></div>
+              <div className="absolute inset-8 bg-white rounded-full flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-sm font-bold text-gray-700">Diet</div>
+                  <div className="text-xs text-gray-500">{dietData.reduce((sum, diet) => sum + diet.value, 0).toLocaleString()}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Enhanced Diet Data Display */}
+          <div className="space-y-4">
+            {dietData.map((diet, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-4 h-4 rounded-full ${diet.color}`}></div>
+                    <span className="text-sm font-medium text-gray-700">{diet.name}</span>
+                  </div>
+                  <span className="text-sm font-bold text-gray-800">{diet.percentage}%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
+                    <div 
+                      className={`h-2 rounded-full ${diet.color}`}
+                      style={{ width: `${diet.percentage}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-gray-600 min-w-fit">{diet.value.toLocaleString()} người</span>
+                </div>
+              </div>
             ))}
           </div>
+
+          {/* Summary Stats */}
+          <div className="mt-5 pt-4 border-t">
+            <div className="text-center">
+              <div className="text-sm text-gray-600">Chế độ ăn phổ biến nhất</div>
+              <div className="text-lg font-bold text-orange-600">Keto (28%)</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Cards */}
-      <div className="grid grid-cols-2 gap-3">
-        {/* Pictures Card */}
-        <div className="bg-white rounded-lg shadow-sm p-3 text-center">
-          <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-purple-600 rounded-lg mx-auto mb-1 flex items-center justify-center">
-            <Eye className="w-4 h-4 text-white" />
-          </div>
-          <div className="text-sm font-bold text-gray-800 mb-1">239 Hình ảnh</div>
-          <p className="text-xs text-gray-500 mb-2">Tải xuống bộ sưu tập hoàn tất</p>
-          <button className="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-3 py-1 rounded text-xs font-medium hover:from-purple-600 hover:to-purple-800 transition-all flex items-center space-x-1 mx-auto">
-            <Download className="w-3 h-3" />
-            <span>Tải ngay</span>
-          </button>
+      {/* Table Section - Bottom */}
+      <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-800">Top món ăn phổ biến</h3>
+          <select className="text-sm border border-gray-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Tuần này</option>
+            <option>Tháng này</option>
+            <option>Quý này</option>
+          </select>
         </div>
 
-        {/* New Followers Card */}
-        <div className="bg-white rounded-lg shadow-sm p-3 text-center">
-          <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-purple-600 rounded-lg mx-auto mb-1 flex items-center justify-center">
-            <Star className="w-4 h-4 text-white" />
-          </div>
-          <div className="text-sm font-bold text-gray-800 mb-1">5,453</div>
-          <p className="text-xs text-gray-500 mb-2">Người theo dõi mới trên Stack</p>
-          <button className="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-3 py-1 rounded text-xs font-medium hover:from-purple-600 hover:to-purple-800 transition-all">
-            Tìm thêm
-          </button>
+        <div className="text-center mb-4">
+          <div className="text-2xl font-bold text-gray-800">8,622</div>
+          <div className="text-sm text-gray-500">Tổng lượt đặt món trong tuần</div>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b-2 border-gray-200">
+                <th className="text-left py-3 px-2 text-gray-600 font-semibold">#</th>
+                <th className="text-left py-3 px-2 text-gray-600 font-semibold">Tên món</th>
+                <th className="text-right py-3 px-2 text-gray-600 font-semibold">Đơn hàng</th>
+                <th className="text-right py-3 px-2 text-gray-600 font-semibold">Tỷ lệ</th>
+                <th className="text-right py-3 px-2 text-gray-600 font-semibold">Xu hướng</th>
+              </tr>
+            </thead>
+            <tbody>
+              {popularMeals.map((meal, index) => (
+                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <td className="py-3 px-2 font-semibold text-gray-500 text-lg">{index + 1}</td>
+                  <td className="py-3 px-2 text-gray-700 font-medium">{meal.name}</td>
+                  <td className="py-3 px-2 text-right text-gray-600 font-semibold">{meal.orders.toLocaleString()}</td>
+                  <td className="py-3 px-2 text-right text-gray-600 font-semibold">{meal.percentage}%</td>
+                  <td className="py-3 px-2 text-right">
+                    {meal.trend === 'up' ? (
+                      <TrendingUp className="w-5 h-5 text-green-500 inline" />
+                    ) : (
+                      <TrendingDown className="w-5 h-5 text-red-500 inline" />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+
+
     </div>
   );
 };
