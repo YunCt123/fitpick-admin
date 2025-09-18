@@ -6,11 +6,12 @@ import {
   Users, 
   TrendingUp, 
   FileText, 
-  Wallet, 
   LogOut, 
   Search,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ChefHat,
+  CreditCard
 } from 'lucide-react';
 
 interface SideBarProps {
@@ -43,8 +44,8 @@ const SideBar: React.FC<SideBarProps> = ({
     { icon: TrendingUp, label: 'Analytics', path: '/dashboard/analytics' },
     { icon: Users, label: 'Users', path: '/dashboard/users' },
     { icon: FileText, label: 'Blogs', path: '/dashboard/blogs' },
-    { icon: Wallet, label: 'Meals', path: '/dashboard/meals' },
-    { icon: Wallet, label: 'Transactions', path: '/dashboard/transactions' },
+    { icon: ChefHat, label: 'Meals', path: '/dashboard/meals' },
+    { icon: CreditCard, label: 'Transactions', path: '/dashboard/transactions' },
     
   ];
 
