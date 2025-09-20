@@ -1,7 +1,6 @@
 import type { PaginationResponse } from "./PageModel";
 
 
-
 export interface BlogAuthor {
   userId: number;
   userName: string;
