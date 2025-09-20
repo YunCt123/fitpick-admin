@@ -1,4 +1,5 @@
 import api from "@/api/axios";
+import { DASHBOARD } from "@/constants/authURL";
 import { DashboardSchema, type DashboardDTO } from "@/models/Dashboard/dashboard.schema";
 import { dashboardMock } from "@/services/mocks/dashboard.mock";
 
@@ -6,7 +7,9 @@ const USE_MOCK = (import.meta.env.VITE_USE_MOCK ?? "false") === "true";
 
 /** Real API */
 async function getDashboardReal(): Promise<DashboardDTO> {
-    const res = await api.get<unknown>("/dashboard");
+    const baseUrl = DASHBOARD;
+
+    const res = await api.get<unknown>(baseUrl);
     const parsed = DashboardSchema.safeParse(res.data);
     if (!parsed.success) throw new Error("Invalid dashboard payload");
     return parsed.data;
