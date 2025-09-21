@@ -135,12 +135,15 @@ const BlogsNew: React.FC = () => {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center"
+          className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-purple-700 flex items-center shadow-md transition-all duration-200"
         >
           <span className="mr-2">+</span>
           Tạo blog mới
         </button>
       </div>
+
+      {/* BlogStats */}
+      
 
       {/* Error Display */}
       {error && (
@@ -159,22 +162,6 @@ const BlogsNew: React.FC = () => {
         </div>
       )}
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        {statuses.map((status) => (
-          <div
-            key={status.value}
-            className={`bg-white p-6 rounded-lg shadow cursor-pointer transition-colors ${
-              statusFilter === status.value ? 'ring-2 ring-indigo-500' : 'hover:shadow-md'
-            }`}
-            onClick={() => handleStatusFilter(status.value)}
-          >
-            <h3 className="text-lg font-semibold text-gray-900">{status.label}</h3>
-            <p className="text-3xl font-bold text-indigo-600 mt-2">{status.count}</p>
-          </div>
-        ))}
-      </div>
-
       {/* Filters and Search */}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <div className="flex flex-col md:flex-row gap-4">
@@ -186,11 +173,11 @@ const BlogsNew: React.FC = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Tìm kiếm blog theo tiêu đề hoặc nội dung..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700"
+                className="px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-r-md hover:from-purple-600 hover:to-purple-700 transition-all duration-200"
               >
                 🔍
               </button>
@@ -212,7 +199,7 @@ const BlogsNew: React.FC = () => {
             <select
               value={categoryFilter}
               onChange={(e) => handleCategoryFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
               <option value="all">Tất cả danh mục</option>
               {categories.map((category) => (
@@ -251,9 +238,9 @@ const BlogsNew: React.FC = () => {
               <button
                 key={i}
                 onClick={() => setPage(i + 1)}
-                className={`px-3 py-2 border border-gray-300 rounded-md ${
+                className={`px-3 py-2 border border-gray-300 rounded-md transition-all duration-200 ${
                   currentPage === i + 1
-                    ? 'bg-indigo-600 text-white border-indigo-600'
+                    ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white border-purple-500 shadow-md'
                     : 'hover:bg-gray-50'
                 }`}
               >
