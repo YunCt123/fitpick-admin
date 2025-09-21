@@ -17,12 +17,12 @@ api.interceptors.request.use(
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     // Nếu data là FormData, xóa Content-Type để axios tự set
     if (config.data instanceof FormData) {
       delete config.headers['Content-Type'];
     }
-    
+
     return config;
   },
   (error) => {
@@ -52,7 +52,7 @@ api.interceptors.response.use(
     } else {
       console.error('API Setup Error:', error.message);
     }
-    
+
     return Promise.reject(error);
   }
 );
@@ -78,7 +78,7 @@ export const apiUtils = {
    * @param data - Request body
    * @param config - Additional axios config
    */
-  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise< AxiosResponse<T>> {
+  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     const response = await api.post(url, data, config);
     return response as AxiosResponse<T>;
   },
@@ -89,9 +89,9 @@ export const apiUtils = {
    * @param data - Request body
    * @param config - Additional axios config
    */
-  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise< AxiosResponse<T>>  {
+  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     const response = await api.put(url, data, config);
-    return response  as AxiosResponse<T>
+    return response as AxiosResponse<T>
   },
 
   /**
@@ -99,7 +99,7 @@ export const apiUtils = {
    * @param url - API endpoint
    * @param config - Additional axios config
    */
-  async delete<T>(url: string, config?: AxiosRequestConfig): Promise< AxiosResponse<T>>  {
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     const response = await api.delete(url, config);
     return response as AxiosResponse<T>
   },
@@ -123,7 +123,7 @@ export const apiUtils = {
    */
   async uploadFiles<T>(url: string, files: File | File[], config?: AxiosRequestConfig): Promise<T> {
     const formData = new FormData();
-    
+
     if (Array.isArray(files)) {
       files.forEach((file, index) => {
         formData.append(`file${index}`, file);
