@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
-  BarChart3, 
   Users, 
   TrendingUp, 
   FileText, 
@@ -13,6 +12,9 @@ import {
   ChefHat,
   CreditCard
 } from 'lucide-react';
+import { authService } from '../services/auth.service';
+import { toast } from 'react-toastify';
+import LogoutModal from './ui/LogoutModal';
 
 interface SideBarProps {
   isCollapsed?: boolean;
@@ -24,7 +26,10 @@ const SideBar: React.FC<SideBarProps> = ({
   onToggleCollapse 
 }) => {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Use external prop if provided, otherwise use internal state
   const isCollapsed = externalCollapsed !== undefined ? externalCollapsed : internalCollapsed;
@@ -38,9 +43,54 @@ const SideBar: React.FC<SideBarProps> = ({
     }
   };
 
+  const handleLogout = () => {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+
+    try {
+      // Don't clear Remember Me data by default - let user choose on login page
+      authService.logout(false);
+      
+      toast.success('Đăng xuất thành công!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      
+      // Redirect to login page
+      navigate('/login', { replace: true });
+    } catch (error: any) {
+      console.error('Logout error:', error);
+      toast.error('Có lỗi xảy ra khi đăng xuất', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } finally {
+      setIsLoggingOut(false);
+      setShowLogoutModal(false);
+    }
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleCloseModal = () => {
+    if (!isLoggingOut) {
+      setShowLogoutModal(false);
+    }
+  };
+
   const menuItems = [
     { icon: Home, label: 'Dashboard', path: '/dashboard' },
-    { icon: BarChart3, label: 'Revenue', path: '/dashboard/revenue' },
     { icon: TrendingUp, label: 'Analytics', path: '/dashboard/analytics' },
     { icon: Users, label: 'Users', path: '/dashboard/users' },
     { icon: FileText, label: 'Blogs', path: '/dashboard/blogs' },
@@ -147,25 +197,34 @@ const SideBar: React.FC<SideBarProps> = ({
       {/* Bottom Items */}
       <div className="mt-auto p-3 border-t border-gray-700 space-y-2">
         {/* Logout */}
-        <a
-          href="#"
-          className={`flex items-center rounded-lg transition-colors py-3 text-gray-300 hover:bg-gray-800 hover:text-white ${
+        <button
+          onClick={handleLogoutClick}
+          disabled={isLoggingOut}
+          className={`w-full flex items-center rounded-lg transition-colors py-3 text-gray-300 hover:bg-gray-800 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed ${
             isCollapsed 
               ? 'justify-center px-2' 
               : 'space-x-3 px-4'
           }`}
           title={isCollapsed ? 'Logout' : ''}
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className={`w-5 h-5 ${isLoggingOut ? 'animate-spin' : ''}`} />
           <span
             className={`font-medium transition-opacity duration-150 ${
               isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
             }`}
           >
-            {!isCollapsed && 'Logout'}
+            {!isCollapsed && (isLoggingOut ? 'Logging out...' : 'Logout')}
           </span>
-        </a>
+        </button>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onClose={handleCloseModal}
+        onConfirm={handleLogout}
+        isLoggingOut={isLoggingOut}
+      />
     </div>
   );
 };

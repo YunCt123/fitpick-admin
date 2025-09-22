@@ -4,6 +4,7 @@ import { UserOutlined, EditOutlined } from '@ant-design/icons';
 import { userService } from '../../services/user.service';
 import type { User as UserType } from '../../models/UserModel';
 import { toast } from 'react-toastify';
+import { getRoleName, getRoleOptions } from '../../utils/roleUtils';
 
 interface UpdateUserProps {
   user: UserType | null;
@@ -126,6 +127,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, isVisible, onClose, onUse
             </h4>
             <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: '#666' }}>
               <span>ID: {user?.userid}</span>
+              <span>Role: {user?.roleId ? getRoleName(user.roleId) : 'Unknown'}</span>
               <span>Created: {user ? new Date(user.createdat).toLocaleDateString() : ''}</span>
               <span style={{
                 padding: '2px 8px',
@@ -244,11 +246,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, isVisible, onClose, onUse
               <Select
                 placeholder="Select role"
                 size="large"
-                options={[
-                  { value: 1, label: 'Admin' },
-                  { value: 2, label: 'Premium User' },
-                  { value: 3, label: 'Basic User' }
-                ]}
+                options={getRoleOptions()}
               />
             </Form.Item>
           </Col>
