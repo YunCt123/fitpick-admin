@@ -28,18 +28,15 @@ const BlogsNew: React.FC = () => {
     fetchBlogs,
     createBlog,
     updateBlog,
-    deleteBlog,
     toggleBlogStatus,
     searchBlogs,
     filterByCategory,
-    filterByStatus,
     setPage,
     clearError
   } = useBlogManagement();
 
   // UI State
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
   // Modal States
@@ -56,13 +53,6 @@ const BlogsNew: React.FC = () => {
     { id: 3, name: 'Sức khỏe' },
     { id: 4, name: 'Công thức' },
     { id: 5, name: 'Lifestyle' }
-  ];
-
-  // Stats for status filter
-  const statuses = [
-    { value: 'all', label: 'Tất cả', count: totalBlogs },
-    { value: 'published', label: 'Đã xuất bản', count: blogs.filter(b => b.status === true).length },
-    { value: 'draft', label: 'Bản nháp', count: blogs.filter(b => b.status === false).length }
   ];
 
   // Calculate blog stats
@@ -93,15 +83,6 @@ const BlogsNew: React.FC = () => {
       searchBlogs(searchTerm);
     } else {
       fetchBlogs();
-    }
-  };
-
-  const handleStatusFilter = (status: string) => {
-    setStatusFilter(status);
-    if (status === 'all') {
-      filterByStatus(null);
-    } else {
-      filterByStatus(status === 'published');
     }
   };
 

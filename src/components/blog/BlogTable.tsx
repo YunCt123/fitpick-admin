@@ -17,7 +17,6 @@ export const BlogTable: React.FC<BlogTableProps> = ({
   onEdit,
   onDelete,
   onView,
-  onToggleStatus
 }) => {
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 

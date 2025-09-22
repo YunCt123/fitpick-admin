@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Eye, Clock, TrendingUp } from 'lucide-react';
+import { FileText, Eye, Clock } from 'lucide-react';
 
 interface BlogStats {
   total: number;
