@@ -1,5 +1,6 @@
 import React from 'react';
-import { FileText, Eye, Clock } from 'lucide-react';
+import { FileText, Eye, Clock, Edit } from 'lucide-react';
+import StatsGrid, { type StatCard } from '../ui/StatsGrid';
 
 interface BlogStats {
   total: number;
@@ -16,94 +17,38 @@ interface BlogStatsProps {
 }
 
 const BlogStats: React.FC<BlogStatsProps> = ({ stats, loading }) => {
-  const statCards = [
+  const statCards: StatCard[] = [
     {
-      label: 'Tổng số Blog',
-      value: loading ? '...' : stats.total.toLocaleString(),
+      label: 'Total Blogs',
+      value: stats.total.toLocaleString(),
       icon: FileText,
-      color: 'bg-gradient-to-r from-blue-400 to-blue-600',
-      subtitle: 'Tổng bài viết'
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-blue-600'
     },
     {
-      label: 'Blog đã xuất bản',
-      value: loading ? '...' : stats.published.toLocaleString(),
+      label: 'Published Blogs',
+      value: stats.published.toLocaleString(),
       icon: Eye,
-      color: 'bg-gradient-to-r from-green-400 to-green-600',
-      subtitle: 'Đang hoạt động'
+      bgColor: 'bg-green-100',
+      iconColor: 'text-green-600'
     },
     {
-      label: 'Blog bản nháp',
-      value: loading ? '...' : stats.draft.toLocaleString(),
-      icon: FileText,
-      color: 'bg-gradient-to-r from-purple-400 to-purple-600',
-      subtitle: 'Chưa xuất bản'
+      label: 'Draft Blogs',
+      value: stats.draft.toLocaleString(),
+      icon: Edit,
+      bgColor: 'bg-yellow-100',
+      iconColor: 'text-yellow-600'
     },
     {
-      label: 'Thời gian đọc TB',
-      value: loading ? '...' : `${Math.round(stats.averageReadingTime)} phút`,
+      label: 'Avg Reading Time',
+      value: `${Math.round(stats.averageReadingTime)} mins`,
       icon: Clock,
-      color: 'bg-gradient-to-r from-orange-400 to-orange-600',
-      subtitle: 'Trung bình'
+      bgColor: 'bg-purple-100',
+      iconColor: 'text-purple-600'
     },
   ];
 
-  return (
-    <div className="mb-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((card, index) => {
-          const IconComponent = card.icon;
-          return (
-            <div 
-              key={index} 
-              className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-200"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`h-12 w-12 ${card.color} rounded-xl flex items-center justify-center shadow-lg`}>
-                      <IconComponent className="h-6 w-6 text-white" />
-                    </div>
-                    {!loading && (index === 1 || index === 2) && (
-                      <div className="text-right">
-                        <div className="text-xs text-gray-500 mb-1">% tổng blog</div>
-                        <div className="text-sm font-semibold text-gray-700">
-                          {index === 1 
-                            ? `${Math.round((stats.published / stats.total) * 100)}%`
-                            : `${Math.round((stats.draft / stats.total) * 100)}%`
-                          }
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="text-2xl font-bold text-gray-900 mb-2">{card.value}</div>
-                  <div className="text-sm text-gray-600 font-medium">{card.label}</div>
-                  <div className="text-xs text-gray-500 mt-1">{card.subtitle}</div>
-                  
-                  {/* Progress bar for published vs draft */}
-                  {(index === 1 || index === 2) && !loading && stats.total > 0 && (
-                    <div className="mt-3">
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-500 ${
-                            index === 1 ? 'bg-green-500' : 'bg-purple-500'
-                          }`}
-                          style={{ 
-                            width: `${index === 1 
-                              ? (stats.published / stats.total) * 100 
-                              : (stats.draft / stats.total) * 100}%` 
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+  return <StatsGrid cards={statCards} loading={loading} />;
 };
 
 export default BlogStats;

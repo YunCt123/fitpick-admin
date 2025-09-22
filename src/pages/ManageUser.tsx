@@ -8,6 +8,7 @@ import DeleteUser from "../components/user/DeleteUser";
 import UserSearch from "../components/user/UserSearch";
 import UserTable from "../components/user/UserTable";
 import UserPagination from "../components/user/UserPagination";
+import UserStats from "../components/user/UserStats";
 import { useUserManagement } from "../hooks/useUserManagement";
 
 const ManageUser: React.FC = () => {
@@ -108,6 +109,9 @@ const ManageUser: React.FC = () => {
           <span>Add New User</span>
         </button>
       </div>
+
+      {/* User Statistics */}
+      <UserStats users={filteredUsers} loading={loading} />
 
       {/* Search Component */}
       <UserSearch onSearch={handleSearch} loading={loading} />
