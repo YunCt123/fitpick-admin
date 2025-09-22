@@ -83,9 +83,10 @@ export const FormOptions = {
   ],
 
   role: [
-    { value: 1, label: 'Admin' },
-    { value: 2, label: 'Premium ' },
-    { value: 3, label: 'User' },
+    { value: 1, label: 'Guest' },
+    { value: 2, label: 'User' },
+    { value: 3, label: 'Premium' },
+    { value: 4, label: 'Admin' },
   ],
 
   status: [

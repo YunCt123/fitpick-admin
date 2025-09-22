@@ -7,29 +7,57 @@ import {
 import { ToastContainer } from "react-toastify";
 import DashBoard from "./pages/DashBoard";
 import Login from "./pages/Login";
-import Revenue from "./pages/Revenue";
 import Analytics from "./pages/Analytics";
 import DashboardHome from "./pages/DashboardHome";
 import Blogs from "./pages/Blogs";
 import ManageUser from "./pages/ManageUser";
 import Meal from "./pages/Meal";
 import Transactions from "./pages/Transactions";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { authService } from "./services/auth.service";
 import "./App.css";
 
 function App() {
+  // Component để xử lý root route
+  const RootRedirect = () => {
+    const isAuthenticated = authService.isAuthenticated();
+    
+    // Nếu đã đăng nhập thì đến dashboard, nếu chưa thì đến login
+    return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />;
+  };
+
+  // Component để xử lý login route khi đã đăng nhập
+  const LoginRoute = () => {
+    const isAuthenticated = authService.isAuthenticated();
+    
+    // Nếu đã đăng nhập thì redirect về dashboard
+    if (isAuthenticated) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    
+    // Nếu chưa đăng nhập thì hiển thị trang login
+    return <Login />;
+  };
+
   return (
     <Router>
       <Routes>
-        {/* Redirect root to dashboard */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Redirect root route dựa trên authentication status */}
+        <Route path="/" element={<RootRedirect />} />
 
-        {/* Login route */}
-        <Route path="/login" element={<Login />} />
+        {/* Login route - redirect to dashboard if already authenticated */}
+        <Route path="/login" element={<LoginRoute />} />
 
-        {/* Dashboard layout with nested routes */}
-        <Route path="/dashboard" element={<DashBoard />}>
+        {/* Protected Dashboard routes - yêu cầu authentication */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <DashBoard />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<DashboardHome />} />
-          <Route path="revenue" element={<Revenue />} />
           <Route path="users" element={<ManageUser />} />
           <Route path="meals" element={<Meal />} />
           <Route path="analytics" element={<Analytics />} />
