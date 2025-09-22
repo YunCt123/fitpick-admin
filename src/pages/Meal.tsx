@@ -88,16 +88,7 @@ const MealManagement: React.FC = () => {
     setSelectedMeal(null);
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="flex flex-col justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mb-4"></div>
-          <p className="text-gray-600">Loading meals...</p>
-        </div>
-      </div>
-    );
-  }
+  // Remove full page loading - now handled by individual components
 
   if (error) {
     return (
