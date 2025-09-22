@@ -156,14 +156,14 @@ const UserTable: React.FC<UserTableProps> = ({ users, loading, onView, onEdit, o
                     <div className="flex space-x-2">
                       <button
                         onClick={() => onView(user)}
-                        className="text-purple-600 hover:text-purple-900 transition-colors"
+                        className="text-blue-600 hover:text-blue-900 transition-colors"
                         title="View Details"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => onEdit(user)}
-                        className="text-yellow-600 hover:text-yellow-900 transition-colors"
+                        className="text-green-600 hover:text-green-900 transition-colors"
                         title="Edit User"
                       >
                         <Edit className="w-4 h-4" />
