@@ -6,3 +6,4 @@ export { default as DeleteUser } from './DeleteUser';
 export { default as UserSearch } from './UserSearch';
 export { default as UserTable } from './UserTable';
 export { default as UserPagination } from './UserPagination';
+export { default as UserStats } from './UserStats';
