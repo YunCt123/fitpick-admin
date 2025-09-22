@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useBlogManagement } from '../hooks/useBlogManagement';
-import { BlogTable, CreateBlog, UpdateBlog, BlogDetails } from '../components/blog';
+import { BlogTable, CreateBlog, UpdateBlog, BlogDetails, BlogStats, DeleteBlog } from '../components/blog';
 import type { Blog } from '../models/BlogModel';
 
 interface BlogFormData {
@@ -45,6 +46,7 @@ const BlogsNew: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
   // Categories for filter
@@ -62,6 +64,27 @@ const BlogsNew: React.FC = () => {
     { value: 'published', label: 'Đã xuất bản', count: blogs.filter(b => b.status === true).length },
     { value: 'draft', label: 'Bản nháp', count: blogs.filter(b => b.status === false).length }
   ];
+
+  // Calculate blog stats
+  const blogStats = useMemo(() => {
+    const published = blogs.filter(blog => blog.status === true);
+    const draft = blogs.filter(blog => blog.status === false);
+    
+    // Calculate average reading time (estimate: 200 words per minute)
+    const avgReadingTime = blogs.length > 0 
+      ? blogs.reduce((sum, blog) => {
+          const wordCount = blog.content ? blog.content.split(' ').length : 0;
+          return sum + (wordCount / 200);
+        }, 0) / blogs.length
+      : 0;
+
+    return {
+      total: totalBlogs || blogs.length,
+      published: published.length,
+      draft: draft.length,
+      averageReadingTime: avgReadingTime
+    };
+  }, [blogs, totalBlogs]);
 
   // Handlers
   const handleSearch = (e: React.FormEvent) => {
@@ -99,8 +122,9 @@ const BlogsNew: React.FC = () => {
     return await updateBlog(id, data);
   };
 
-  const handleDeleteBlog = async (id: number) => {
-    return await deleteBlog(id);
+  const handleDeleteBlog = (blog: Blog) => {
+    setSelectedBlog(blog);
+    setShowDeleteModal(true);
   };
 
   const handleToggleStatus = async (id: number, status: boolean) => {
@@ -115,6 +139,10 @@ const BlogsNew: React.FC = () => {
   const handleEditBlog = (blog: Blog) => {
     setSelectedBlog(blog);
     setShowUpdateModal(true);
+  };
+
+  const handleBlogDeleted = () => {
+    fetchBlogs();
   };
 
   // Clear search
@@ -143,7 +171,7 @@ const BlogsNew: React.FC = () => {
       </div>
 
       {/* BlogStats */}
-      
+      <BlogStats stats={blogStats} loading={loading} />
 
       {/* Error Display */}
       {error && (
@@ -168,18 +196,21 @@ const BlogsNew: React.FC = () => {
           {/* Search */}
           <form onSubmit={handleSearch} className="flex-1">
             <div className="flex">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Tìm kiếm blog theo tiêu đề hoặc nội dung..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Tìm kiếm blog theo tiêu đề hoặc nội dung..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
               <button
                 type="submit"
                 className="px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-r-md hover:from-purple-600 hover:to-purple-700 transition-all duration-200"
               >
-                🔍
+                <Search className="w-4 h-4" />
               </button>
               {searchTerm && (
                 <button
@@ -285,6 +316,16 @@ const BlogsNew: React.FC = () => {
           setSelectedBlog(null);
         }}
         blog={selectedBlog}
+      />
+
+      <DeleteBlog
+        blog={selectedBlog}
+        isVisible={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setSelectedBlog(null);
+        }}
+        onBlogDeleted={handleBlogDeleted}
       />
     </div>
   );

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Modal, Button, Row, Col, Tag, Divider } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
 import type { Blog } from '../../models/BlogModel';
 
 interface BlogDetailsProps {
@@ -12,150 +14,137 @@ export const BlogDetails: React.FC<BlogDetailsProps> = ({
   onClose,
   blog
 }) => {
-  if (!isOpen || !blog) return null;
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('vi-VN');
+    return new Date(dateString).toLocaleDateString('en-US', { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric' 
+    });
   };
 
+  const handleImageError = (imageUrl: string) => {
+    setFailedImages(prev => new Set(prev).add(imageUrl));
+  };
+
+  if (!blog) return null;
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Chi tiết blog</h2>
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-xl"
-            >
-              ✕
-            </button>
-          </div>
+    <Modal
+      title={
+        <div style={{ color: '#7C3AED', fontSize: '24px', fontWeight: 'bold', textAlign: 'center' }}>
+          <EyeOutlined style={{ marginRight: '8px' }} />
+          Blog Details
+        </div>
+      }
+      open={isOpen}
+      onCancel={onClose}
+      footer={[
+        <Button key="close" onClick={onClose} size="large" style={{ minWidth: '100px' }}>
+          Close
+        </Button>
+      ]}
+      width={800}
+      destroyOnClose
+    >
+      {/* Blog Header */}
+      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <h3 style={{ margin: '8px 0', fontSize: '20px', fontWeight: 'bold' }}>
+          {blog.title}
+        </h3>
+        <Tag color={blog.status ? 'green' : 'orange'} style={{ fontSize: '12px', padding: '4px 12px' }}>
+          {blog.status ? 'Published' : 'Draft'}
+        </Tag>
+      </div>
 
-          {/* Blog Header */}
-          <div className="border-b pb-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-3xl font-bold text-gray-900">{blog.title}</h1>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                blog.status
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-yellow-100 text-yellow-800'
-              }`}>
-                {blog.status ? '✓ Đã xuất bản' : '⏳ Bản nháp'}
-              </span>
-            </div>
+      <Divider />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
-              <div>
-                <span className="font-medium">Tác giả:</span> {blog.author.userName}
-              </div>
-              <div>
-                <span className="font-medium">Danh mục:</span> ID {blog.categoryid}
-              </div>
-              <div>
-                <span className="font-medium">ID Blog:</span> {blog.postid}
-              </div>
-              <div>
-                <span className="font-medium">Ngày tạo:</span> {formatDate(blog.createdat)}
-              </div>
-              <div>
-                <span className="font-medium">Cập nhật lần cuối:</span> {formatDate(blog.updatedat)}
-              </div>
-            </div>
-          </div>
+      {/* Blog Information */}
+      <Row gutter={[24, 16]}>
+        <Col span={12}>
+          <p><strong>Author:</strong> {blog.author.userName}</p>
+        </Col>
+        <Col span={12}>
+          <p><strong>Category ID:</strong> {blog.categoryid}</p>
+        </Col>
+        <Col span={12}>
+          <p><strong>Blog ID:</strong> {blog.postid}</p>
+        </Col>
+        <Col span={12}>
+          <p><strong>Status:</strong> {blog.status ? 'Active' : 'Inactive'}</p>
+        </Col>
+        <Col span={12}>
+          <p><strong>Created Date:</strong> {formatDate(blog.createdat)}</p>
+        </Col>
+        <Col span={12}>
+          <p><strong>Updated Date:</strong> {formatDate(blog.updatedat)}</p>
+        </Col>
+      </Row>
 
-          {/* Blog Media */}
-          {blog.medias && blog.medias.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Hình ảnh</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {blog.medias.map((media, index) => (
-                  <div key={media.mediaId || index} className="relative">
-                    <img
-                      src={media.mediaUrl}
-                      alt={`Blog media ${index + 1}`}
-                      className="w-full h-48 object-cover rounded-lg shadow-sm"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=Không+thể+tải+ảnh';
-                      }}
-                    />
-                    <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
-                      {index + 1}
-                    </div>
-                    <div className="mt-2">
-                      <p className="text-xs text-gray-500">
-                        Loại: {media.mediaType} | Thứ tự: {media.orderIndex}
-                      </p>
-                      <a
-                        href={media.mediaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-blue-500 hover:text-blue-700 break-all"
-                      >
-                        {media.mediaUrl}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+      <Divider />
 
-          {/* Blog Content */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Nội dung</h3>
-            <div className="prose max-w-none">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">
-                  {blog.content}
-                </pre>
-              </div>
-            </div>
-          </div>
-
-          {/* Blog Statistics (if available) */}
-          <div className="border-t pt-4">
-            <h4 className="text-md font-semibold text-gray-900 mb-3">Thông tin khác</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <div className="text-blue-600 font-medium">Số media</div>
-                <div className="text-xl font-bold text-blue-900">
-                  {blog.medias ? blog.medias.length : 0}
-                </div>
-              </div>
-              <div className="bg-green-50 p-3 rounded-lg">
-                <div className="text-green-600 font-medium">Trạng thái</div>
-                <div className="text-xl font-bold text-green-900">
-                  {blog.status ? 'Công khai' : 'Riêng tư'}
-                </div>
-              </div>
-              <div className="bg-purple-50 p-3 rounded-lg">
-                <div className="text-purple-600 font-medium">Tác giả ID</div>
-                <div className="text-xl font-bold text-purple-900">
-                  {blog.author.userId}
-                </div>
-              </div>
-              <div className="bg-orange-50 p-3 rounded-lg">
-                <div className="text-orange-600 font-medium">Danh mục ID</div>
-                <div className="text-xl font-bold text-orange-900">
-                  {blog.categoryid}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end mt-6 pt-4 border-t">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-            >
-              Đóng
-            </button>
-          </div>
+      {/* Blog Content */}
+      <div style={{ marginBottom: '16px' }}>
+        <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>Content</h4>
+        <div style={{ 
+          background: '#f8f9fa', 
+          border: '1px solid #dee2e6', 
+          borderRadius: '8px', 
+          padding: '16px',
+          maxHeight: '200px',
+          overflowY: 'auto'
+        }}>
+          <pre style={{ 
+            whiteSpace: 'pre-wrap', 
+            fontFamily: 'inherit', 
+            margin: 0,
+            fontSize: '14px',
+            lineHeight: '1.5'
+          }}>
+            {blog.content}
+          </pre>
         </div>
       </div>
-    </div>
+
+      {/* Blog Media */}
+      {blog.medias && blog.medias.length > 0 && (
+        <>
+          <Divider />
+          <div style={{ marginBottom: '16px' }}>
+            <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '12px' }}>
+              Media Files ({blog.medias.length})
+            </h4>
+            <Row gutter={[12, 12]}>
+              {blog.medias.map((media, index) => (
+                <Col span={8} key={media.mediaId || index}>
+                  <div style={{ textAlign: 'center' }}>
+                    <img
+                      src={failedImages.has(media.mediaUrl) 
+                        ? 'https://via.placeholder.com/150x100?text=No+Image' 
+                        : media.mediaUrl
+                      }
+                      alt={`Blog media ${index + 1}`}
+                      style={{ 
+                        width: '100%', 
+                        height: '80px', 
+                        objectFit: 'cover', 
+                        borderRadius: '4px',
+                        border: '1px solid #d9d9d9'
+                      }}
+                      onError={() => handleImageError(media.mediaUrl)}
+                    />
+                    <p style={{ fontSize: '12px', margin: '4px 0', color: '#666' }}>
+                      {media.mediaType} - Order: {media.orderIndex}
+                    </p>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </>
+      )}
+    </Modal>
   );
 };
 

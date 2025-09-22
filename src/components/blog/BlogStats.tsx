@@ -1,11 +1,13 @@
 import React from 'react';
-import { Clock, DollarSign, Users, Star } from 'lucide-react';
+import { FileText, Eye, Clock, TrendingUp } from 'lucide-react';
 
 interface BlogStats {
   total: number;
   published: number;
   draft: number;  
   averageReadingTime: number;
+  totalViews?: number;
+  growthRate?: number;
 }
 
 interface BlogStatsProps {
@@ -14,62 +16,92 @@ interface BlogStatsProps {
 }
 
 const BlogStats: React.FC<BlogStatsProps> = ({ stats, loading }) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
   const statCards = [
     {
-      label: 'Total Meals',
-      value: loading ? '...' : stats.total.toString(),
-      icon: Users,
-      bgColor: 'bg-blue-100',
-      iconColor: 'text-blue-600',
+      label: 'Tổng số Blog',
+      value: loading ? '...' : stats.total.toLocaleString(),
+      icon: FileText,
+      color: 'bg-gradient-to-r from-blue-400 to-blue-600',
+      subtitle: 'Tổng bài viết'
     },
     {
-      label: 'Published Blogs',
-      value: loading ? '...' : stats.published.toString(),
-      icon: Star,
-      bgColor: 'bg-yellow-100',
-      iconColor: 'text-yellow-600',
+      label: 'Blog đã xuất bản',
+      value: loading ? '...' : stats.published.toLocaleString(),
+      icon: Eye,
+      color: 'bg-gradient-to-r from-green-400 to-green-600',
+      subtitle: 'Đang hoạt động'
     },
     {
-      label: 'Average Reading Time',
-      value: loading ? '...' : `${Math.round(stats.averageReadingTime)} mins`,
-      icon: DollarSign,
-      bgColor: 'bg-green-100',
-      iconColor: 'text-green-600',
+      label: 'Blog bản nháp',
+      value: loading ? '...' : stats.draft.toLocaleString(),
+      icon: FileText,
+      color: 'bg-gradient-to-r from-purple-400 to-purple-600',
+      subtitle: 'Chưa xuất bản'
     },
     {
-      label: 'Avg Reading Time',
-      value: loading ? '...' : `${Math.round(stats.averageReadingTime)} mins`,
+      label: 'Thời gian đọc TB',
+      value: loading ? '...' : `${Math.round(stats.averageReadingTime)} phút`,
       icon: Clock,
-      bgColor: 'bg-purple-100',
-      iconColor: 'text-purple-600',
+      color: 'bg-gradient-to-r from-orange-400 to-orange-600',
+      subtitle: 'Trung bình'
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      {statCards.map((card, index) => {
-        const IconComponent = card.icon;
-        return (
-          <div key={index} className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">{card.label}</p>
-                <p className="text-2xl font-bold text-gray-900">{card.value}</p>
-              </div>
-              <div className={`h-12 w-12 ${card.bgColor} rounded-lg flex items-center justify-center`}>
-                <IconComponent className={`h-6 w-6 ${card.iconColor}`} />
+    <div className="mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {statCards.map((card, index) => {
+          const IconComponent = card.icon;
+          return (
+            <div 
+              key={index} 
+              className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-200"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`h-12 w-12 ${card.color} rounded-xl flex items-center justify-center shadow-lg`}>
+                      <IconComponent className="h-6 w-6 text-white" />
+                    </div>
+                    {!loading && (index === 1 || index === 2) && (
+                      <div className="text-right">
+                        <div className="text-xs text-gray-500 mb-1">% tổng blog</div>
+                        <div className="text-sm font-semibold text-gray-700">
+                          {index === 1 
+                            ? `${Math.round((stats.published / stats.total) * 100)}%`
+                            : `${Math.round((stats.draft / stats.total) * 100)}%`
+                          }
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 mb-2">{card.value}</div>
+                  <div className="text-sm text-gray-600 font-medium">{card.label}</div>
+                  <div className="text-xs text-gray-500 mt-1">{card.subtitle}</div>
+                  
+                  {/* Progress bar for published vs draft */}
+                  {(index === 1 || index === 2) && !loading && stats.total > 0 && (
+                    <div className="mt-3">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div 
+                          className={`h-2 rounded-full transition-all duration-500 ${
+                            index === 1 ? 'bg-green-500' : 'bg-purple-500'
+                          }`}
+                          style={{ 
+                            width: `${index === 1 
+                              ? (stats.published / stats.total) * 100 
+                              : (stats.draft / stats.total) * 100}%` 
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

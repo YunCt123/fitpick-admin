@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Modal, Form, Input, Select, Button, Row, Col, Checkbox } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import type { Blog } from '../../models/BlogModel';
 
 interface BlogUpdateData {
@@ -127,8 +129,20 @@ export const UpdateBlog: React.FC<UpdateBlogProps> = ({
   if (!isOpen || !blog) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <Modal
+      title={
+        <div style={{ color: '#7C3AED', fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
+          <EditOutlined style={{ marginRight: '8px' }} />
+          Update Blog
+        </div>
+      }
+      open={isOpen}
+      onCancel={onClose}
+      footer={null}
+      width={600}
+      destroyOnClose
+    >
+      <div className="max-h-[70vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Chỉnh sửa blog</h2>
@@ -287,7 +301,7 @@ export const UpdateBlog: React.FC<UpdateBlogProps> = ({
           </form>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 
