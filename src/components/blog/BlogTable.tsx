@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, Edit, Trash2 } from 'lucide-react';
+import { Eye, Edit, Trash2, Loader2 } from 'lucide-react';
 import type { Blog } from '../../models/BlogModel';
 
 interface BlogTableProps {
@@ -36,11 +36,10 @@ export const BlogTable: React.FC<BlogTableProps> = ({
   if (loading) {
     return (
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-6">
-          <div className="animate-pulse space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-12 bg-gray-200 rounded"></div>
-            ))}
+        <div className="p-12 text-center">
+          <div className="flex flex-col items-center justify-center space-y-4">
+            <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+            <p className="text-gray-500">Loading blogs...</p>
           </div>
         </div>
       </div>

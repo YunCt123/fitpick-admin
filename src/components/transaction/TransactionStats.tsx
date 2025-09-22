@@ -16,8 +16,6 @@ interface TransactionStatsProps {
 }
 
 const TransactionStats: React.FC<TransactionStatsProps> = ({ stats, loading = false }) => {
-  console.log("TransactionStats received:", { stats, loading });
-  
   // Handle null stats
   if (!stats) {
     const emptyStats = {
@@ -40,7 +38,7 @@ const TransactionStats: React.FC<TransactionStatsProps> = ({ stats, loading = fa
 
   const statCards: StatCard[] = [
     {
-      label: 'Tổng doanh thu',
+      label: 'Total Transactions',
       value: formatCurrency(stats.totalAmount),
       icon: DollarSign,
       bgColor: 'bg-gradient-to-r from-green-400 to-green-600',
@@ -48,7 +46,7 @@ const TransactionStats: React.FC<TransactionStatsProps> = ({ stats, loading = fa
       textColor: 'text-black'
     },
     {
-      label: 'Thành công',
+      label: 'Successful',
       value: `${stats.completed} (${stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}%)`,
       icon: CheckCircle,
       bgColor: 'bg-green-100',
@@ -56,7 +54,7 @@ const TransactionStats: React.FC<TransactionStatsProps> = ({ stats, loading = fa
       textColor: 'text-green-700'
     },
     {
-      label: 'Đang xử lý',
+      label: 'Pending',
       value: `${stats.pending} (${stats.total > 0 ? Math.round((stats.pending / stats.total) * 100) : 0}%)`,
       icon: Clock,
       bgColor: 'bg-yellow-100',
@@ -64,7 +62,7 @@ const TransactionStats: React.FC<TransactionStatsProps> = ({ stats, loading = fa
       textColor: 'text-yellow-700'
     },
     {
-      label: 'Thất bại',
+      label: 'Failed',
       value: `${stats.failed} (${stats.total > 0 ? Math.round((stats.failed / stats.total) * 100) : 0}%)`,
       icon: XCircle,
       bgColor: 'bg-red-100',

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { debounce } from 'lodash';
 import { transactionService } from '../services/transaction.service';
 import type { PaymentResponse } from '../models/TransactionModel';
@@ -10,13 +10,6 @@ interface PaginationState {
   totalPages: number;
 }
 
-interface TransactionStats {
-  total: number;
-  completed: number;
-  pending: number;
-  failed: number;
-  totalAmount: number;
-}
 
 export const useTransactionManagement = () => {
   const [searchText, setSearchText] = useState("");
@@ -25,7 +18,7 @@ export const useTransactionManagement = () => {
   const [filteredTransactions, setFilteredTransactions] = useState<PaymentResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<TransactionStats | null>(null);
+
 
   const [pagination, setPagination] = useState<PaginationState>({
     current: 1,
@@ -33,6 +26,42 @@ export const useTransactionManagement = () => {
     totalItems: 0,
     totalPages: 0
   });
+
+  // Calculate stats using useMemo to avoid unnecessary recalculations
+  const stats = useMemo(() => {
+    if (filteredTransactions.length === 0) {
+      return {
+        total: 0,
+        completed: 0,
+        pending: 0,
+        failed: 0,
+        totalAmount: 0
+      };
+    }
+
+    const total = filteredTransactions.length;
+    const completed = filteredTransactions.filter(t => 
+      t.status?.toLowerCase() === 'completed' || t.status?.toLowerCase() === 'success'
+    ).length;
+    const pending = filteredTransactions.filter(t => 
+      t.status?.toLowerCase() === 'pending'
+    ).length;
+    const failed = filteredTransactions.filter(t => 
+      t.status?.toLowerCase() === 'failed' || t.status?.toLowerCase() === 'cancelled'
+    ).length;
+    
+    const totalAmount = filteredTransactions
+      .filter(t => t.status?.toLowerCase() === 'completed' || t.status?.toLowerCase() === 'success')
+      .reduce((sum, t) => sum + (t.amount || 0), 0);
+
+    return {
+      total,
+      completed,
+      pending,
+      failed,
+      totalAmount
+    };
+  }, [filteredTransactions]);
 
   // Fetch transactions from API
   const fetchTransactions = useCallback(async (search: string = "", page: number = 1, size: number = 10, status?: string, dateRange?: string, userId?: number) => {
@@ -81,51 +110,6 @@ export const useTransactionManagement = () => {
     }
   }, []);
 
-  // Fetch transaction stats
-  const fetchStats = useCallback(async () => {
-    try {
-      const response = await transactionService.getTransactionStats();
-      if (response?.data) {
-        setStats(response.data);
-      }
-    } catch (err: any) {
-      console.error("Error fetching transaction stats:", err);
-      // Fallback: calculate stats from current transactions
-      calculateStatsFromTransactions();
-    }
-  }, []);
-
-  // Calculate stats from filtered transactions as fallback
-  const calculateStatsFromTransactions = useCallback(() => {
-    if (filteredTransactions.length > 0) {
-      const total = filteredTransactions.length;
-      const completed = filteredTransactions.filter(t => 
-        t.status?.toLowerCase() === 'completed' || t.status?.toLowerCase() === 'success'
-      ).length;
-      const pending = filteredTransactions.filter(t => 
-        t.status?.toLowerCase() === 'pending'
-      ).length;
-      const failed = filteredTransactions.filter(t => 
-        t.status?.toLowerCase() === 'failed' || t.status?.toLowerCase() === 'cancelled'
-      ).length;
-      
-      const totalAmount = filteredTransactions
-        .filter(t => t.status?.toLowerCase() === 'completed' || t.status?.toLowerCase() === 'success')
-        .reduce((sum, t) => sum + (t.amount || 0), 0);
-
-      const calculatedStats = {
-        total,
-        completed,
-        pending,
-        failed,
-        totalAmount
-      };
-      
-      console.log("Calculated stats from transactions:", calculatedStats);
-      setStats(calculatedStats);
-    }
-  }, [filteredTransactions]);
-
   // Delete transaction
   const deleteTransaction = useCallback(async (id: string | number) => {
     try {
@@ -134,7 +118,7 @@ export const useTransactionManagement = () => {
       
       // Refresh the transaction list after deletion
       await fetchTransactions(searchText, pagination.current, pagination.pageSize);
-      await fetchStats(); // Update stats after deletion
+      // Stats will be updated automatically via useMemo
       
       return { success: true };
     } catch (err: any) {
@@ -144,7 +128,7 @@ export const useTransactionManagement = () => {
     } finally {
       setLoading(false);
     }
-  }, [searchText, pagination.current, pagination.pageSize, fetchTransactions, fetchStats]);
+  }, [searchText, pagination.current, pagination.pageSize, fetchTransactions]);
 
   // Get transaction by ID
   const getTransactionById = useCallback(async (id: string | number) => {
@@ -228,24 +212,7 @@ export const useTransactionManagement = () => {
   // Initial fetch
   useEffect(() => {
     fetchTransactions();
-    fetchStats();
-  }, [fetchTransactions, fetchStats]);
-
-  // Auto calculate stats when transactions change (as fallback)
-  useEffect(() => {
-    if (!stats && filteredTransactions.length > 0) {
-      calculateStatsFromTransactions();
-    } else if (!stats && filteredTransactions.length === 0) {
-      // Set mock data for testing when no transactions
-      setStats({
-        total: 10,
-        completed: 7,
-        pending: 2,
-        failed: 1,
-        totalAmount: 1500000
-      });
-    }
-  }, [filteredTransactions, stats, calculateStatsFromTransactions]);
+  }, [fetchTransactions]);
 
   return {
     // State
@@ -260,7 +227,6 @@ export const useTransactionManagement = () => {
     
     // Actions
     fetchTransactions,
-    fetchStats,
     deleteTransaction,
     getTransactionById,
     getTransactionsByUserId,

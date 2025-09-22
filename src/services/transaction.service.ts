@@ -46,16 +46,4 @@ export const transactionService = {
 		const response = await apiUtils.delete<ApiResponse<null>>(`${TRANSACTIONS}/${id}`, config);
 		return response.data;
 	},
-
-	// Thống kê transaction theo status
-	getTransactionStats: async (config = {}): Promise<ApiResponse<{
-		total: number;
-		completed: number;
-		pending: number;
-		failed: number;
-		totalAmount: number;
-	}>> => {
-		const response = await apiUtils.get<ApiResponse<any>>(`${TRANSACTIONS}/stats`, {}, config);
-		return response.data;
-	},
 };
