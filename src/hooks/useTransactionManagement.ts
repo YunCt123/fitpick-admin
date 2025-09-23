@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { debounce } from 'lodash';
+import { toast } from 'react-toastify';
 import { transactionService } from '../services/transaction.service';
 import type { PaymentResponse } from '../models/TransactionModel';
 
@@ -120,10 +121,13 @@ export const useTransactionManagement = () => {
       await fetchTransactions(searchText, pagination.current, pagination.pageSize);
       // Stats will be updated automatically via useMemo
       
+      toast.success('Transaction deleted successfully!');
       return { success: true };
     } catch (err: any) {
       console.error("Error deleting transaction:", err);
-      setError(err.message || "Failed to delete transaction");
+      const errorMessage = err.message || "Failed to delete transaction";
+      setError(errorMessage);
+      toast.error(errorMessage);
       return { success: false, error: err.message };
     } finally {
       setLoading(false);
