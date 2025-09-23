@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal} from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import { toast } from 'react-toastify';
 import type { Blog } from '../../models/BlogModel';
 
 interface BlogUpdateData {
@@ -115,9 +116,17 @@ export const UpdateBlog: React.FC<UpdateBlogProps> = ({
       medias: mediaList.length > 0 ? mediaList : undefined
     };
 
-    const success = await onSubmit(blog.postid, updateData);
-    if (success) {
-      onClose();
+    try {
+      const success = await onSubmit(blog.postid, updateData);
+      if (success) {
+        toast.success('Blog updated successfully!');
+        onClose();
+      } else {
+        toast.error('Failed to update blog. Please try again.');
+      }
+    } catch (error: any) {
+      console.error('Error updating blog:', error);
+      toast.error(error?.message || 'An unexpected error occurred while updating the blog.');
     }
   };
 

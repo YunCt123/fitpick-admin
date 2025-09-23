@@ -147,7 +147,7 @@ const BlogsNew: React.FC = () => {
           className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-purple-700 flex items-center shadow-md transition-all duration-200"
         >
           <span className="mr-2">+</span>
-          Tạo blog mới
+          Create New Blog
         </button>
       </div>
 

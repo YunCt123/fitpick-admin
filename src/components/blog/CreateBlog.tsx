@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Form, Input, Select, Button, Row, Col, Checkbox } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { toast } from 'react-toastify';
 
 interface BlogFormData {
   title: string;
@@ -56,9 +57,15 @@ export const CreateBlog: React.FC<CreateBlogProps> = ({
 
       const success = await onSubmit(submitData);
       if (success) {
+        toast.success('Blog created successfully!');
         form.resetFields();
         onClose();
+      } else {
+        toast.error('Failed to create blog. Please try again.');
       }
+    } catch (error: any) {
+      console.error('Error creating blog:', error);
+      toast.error(error?.message || 'An unexpected error occurred while creating the blog.');
     } finally {
       setSubmitting(false);
     }
