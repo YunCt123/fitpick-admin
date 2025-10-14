@@ -13,6 +13,9 @@ import Blogs from "./pages/Blogs";
 import ManageUser from "./pages/ManageUser";
 import Meal from "./pages/Meal";
 import Transactions from "./pages/Transactions";
+import Home from "./pages/Home";
+import AboutUs from "./pages/AboutUs";
+import DownloadApp from "./pages/DownloadApp";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { authService } from "./services/auth.service";
 import "./App.css";
@@ -22,8 +25,8 @@ function App() {
   const RootRedirect = () => {
     const isAuthenticated = authService.isAuthenticated();
     
-    // Nếu đã đăng nhập thì đến dashboard, nếu chưa thì đến login
-    return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />;
+    // Nếu đã đăng nhập thì đến dashboard, nếu chưa thì đến home
+    return <Navigate to={isAuthenticated ? "/dashboard" : "/home"} replace />;
   };
 
   // Component để xử lý login route khi đã đăng nhập
@@ -44,6 +47,11 @@ function App() {
       <Routes>
         {/* Redirect root route dựa trên authentication status */}
         <Route path="/" element={<RootRedirect />} />
+
+        {/* Public routes - không cần authentication */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/download" element={<DownloadApp />} />
 
         {/* Login route - redirect to dashboard if already authenticated */}
         <Route path="/login" element={<LoginRoute />} />
@@ -91,12 +99,20 @@ const NotFound = () => {
       <div className="text-center">
         <h1 className="text-6xl font-bold text-gray-800">404</h1>
         <p className="text-xl text-gray-600 mt-4">Page Not Found</p>
-        <a
-          href="/dashboard"
-          className="mt-6 inline-block bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600"
-        >
-          Go to Dashboard
-        </a>
+        <div className="mt-6 space-x-4">
+          <a
+            href="/home"
+            className="inline-block bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600"
+          >
+            Go to Home
+          </a>
+          <a
+            href="/login"
+            className="inline-block border-2 border-purple-500 text-purple-500 px-6 py-3 rounded-lg hover:bg-purple-500 hover:text-white"
+          >
+            Admin Login
+          </a>
+        </div>
       </div>
     </div>
   );

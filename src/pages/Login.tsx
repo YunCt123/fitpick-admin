@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { authService } from '../services/auth.service';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import fitpickLogo from '../assets/fitpick_logo.png';
+import logoWeb from '../assets/FitPick-logo.png';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -188,17 +188,11 @@ const Login: React.FC = () => {
 
         {/* Right Side - Login Form */}
         <div className="w-full md:w-1/2 p-12 flex flex-col justify-center">
-          {/* Mobile Logo */}
-          <div className="md:hidden text-center mb-8">
-            <img 
-              src={fitpickLogo} 
-              alt="FitPick Logo" 
-              className="w-16 h-16 mx-auto mb-4"
-            />
-          </div>
-
           {/* Form Header */}
           <div className="mb-8 justify-center text-center">
+            <div className="flex justify-center mb-4">
+              <img src={logoWeb} alt="FitPick Logo" className="h-60 w-auto" />
+            </div>
             <h2 className="text-4xl font-bold text-gray-800 mb-2">Sign In</h2>
           </div>
 
