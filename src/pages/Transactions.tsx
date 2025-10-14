@@ -5,6 +5,7 @@ import {
   TransactionTable, 
   TransactionDetails, 
   DeleteTransaction,
+  UpdateTransactionStatus,
   TransactionStats,
   TransactionFilters
 } from "../components/transaction";
@@ -14,6 +15,7 @@ const Transactions: React.FC = () => {
   const [selectedTransaction, setSelectedTransaction] = useState<PaymentResponse | null>(null);
   const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isUpdateStatusModalVisible, setIsUpdateStatusModalVisible] = useState(false);
 
   // Use custom hook for transaction management logic
   const {
@@ -30,6 +32,7 @@ const Transactions: React.FC = () => {
     handleDateRangeChange,
     handleClearFilters,
     handlePageChange,
+    updateTransactionStatus,
     deleteTransaction,
     clearError,
   } = useTransactionManagement();
@@ -40,9 +43,24 @@ const Transactions: React.FC = () => {
     setIsDetailsModalVisible(true);
   };
 
+  const handleEdit = (transaction: PaymentResponse) => {
+    setSelectedTransaction(transaction);
+    setIsUpdateStatusModalVisible(true);
+  };
+
   const handleDelete = (transaction: PaymentResponse) => {
     setSelectedTransaction(transaction);
     setIsDeleteModalVisible(true);
+  };
+
+  const handleUpdateStatusConfirm = async (status: 'PENDING' | 'PAID') => {
+    if (selectedTransaction) {
+      const result = await updateTransactionStatus(selectedTransaction.paymentid, status);
+      if (result.success) {
+        setIsUpdateStatusModalVisible(false);
+        setSelectedTransaction(null);
+      }
+    }
   };
 
   const handleDeleteConfirm = async () => {

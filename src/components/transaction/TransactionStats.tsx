@@ -1,5 +1,5 @@
 import React from 'react';
-import { DollarSign, CheckCircle, Clock, XCircle } from "lucide-react";
+import { DollarSign, CheckCircle, Clock } from "lucide-react";
 import StatsGrid, { type StatCard } from '../ui/StatsGrid';
 
 interface TransactionStats {
@@ -46,7 +46,7 @@ const TransactionStats: React.FC<TransactionStatsProps> = ({ stats, loading = fa
       textColor: 'text-black'
     },
     {
-      label: 'Successful',
+      label: 'Paid',
       value: `${stats.completed} (${stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}%)`,
       icon: CheckCircle,
       bgColor: 'bg-green-100',
@@ -60,14 +60,6 @@ const TransactionStats: React.FC<TransactionStatsProps> = ({ stats, loading = fa
       bgColor: 'bg-yellow-100',
       iconColor: 'text-yellow-600',
       textColor: 'text-yellow-700'
-    },
-    {
-      label: 'Failed',
-      value: `${stats.failed} (${stats.total > 0 ? Math.round((stats.failed / stats.total) * 100) : 0}%)`,
-      icon: XCircle,
-      bgColor: 'bg-red-100',
-      iconColor: 'text-red-600',
-      textColor: 'text-red-700'
     }
   ];
 

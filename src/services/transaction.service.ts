@@ -41,6 +41,16 @@ export const transactionService = {
 		return response.data;
 	},
 
+	// Cập nhật trạng thái transaction
+	updateTransactionStatus: async (id: string | number, status: 'PENDING' | 'PAID', config = {}): Promise<ApiResponse<PaymentResponse>> => {
+		const response = await apiUtils.put<ApiResponse<PaymentResponse>>(
+			`${TRANSACTIONS}/${id}/status`, 
+			{ status }, 
+			config
+		);
+		return response.data;
+	},
+
 	// Xóa transaction (nếu có permission)
 	deleteTransaction: async (id: string | number, config = {}): Promise<ApiResponse<null>> => {
 		const response = await apiUtils.delete<ApiResponse<null>>(`${TRANSACTIONS}/${id}`, config);

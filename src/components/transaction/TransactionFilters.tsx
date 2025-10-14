@@ -22,11 +22,8 @@ const TransactionFilters: React.FC<TransactionFiltersProps> = ({
 }) => {
   const statusOptions = [
     { value: '', label: 'All Status' },
-    { value: 'completed', label: 'Completed' },
-    { value: 'success', label: 'Success' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'failed', label: 'Failed' },
-    { value: 'cancelled', label: 'Cancelled' },
+    { value: 'PENDING', label: 'Pending' },
+    { value: 'PAID', label: 'Paid' },
   ];
 
   const dateRangeOptions = [
