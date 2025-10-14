@@ -6,13 +6,15 @@ interface TransactionTableProps {
   transactions: PaymentResponse[];
   loading: boolean;
   onView: (transaction: PaymentResponse) => void;
+  onEdit?: (transaction: PaymentResponse) => void;
   onDelete: (transaction: PaymentResponse) => void;
 }
 
 const TransactionTable: React.FC<TransactionTableProps> = ({ 
   transactions, 
   loading, 
-  onView, 
+  onView,
+  onEdit, 
   onDelete
 }) => {
   // Format currency
@@ -30,15 +32,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
 
   // Get status badge color
   const getStatusColor = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case 'completed':
-      case 'success':
+    switch (status?.toUpperCase()) {
+      case 'PAID':
         return 'bg-green-100 text-green-800';
-      case 'pending':
+      case 'PENDING':
         return 'bg-yellow-100 text-yellow-800';
-      case 'failed':
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -109,7 +107,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
-                      {transaction.status}
+                      {transaction.status?.toUpperCase() === 'PAID' ? 'Paid' : 'Pending'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -119,6 +117,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                     <TransactionActions
                       transaction={transaction}
                       onView={onView}
+                      onEdit={onEdit}
                       onDelete={onDelete}
                     />
                   </td>

@@ -42,17 +42,15 @@ export const useTransactionManagement = () => {
 
     const total = filteredTransactions.length;
     const completed = filteredTransactions.filter(t => 
-      t.status?.toLowerCase() === 'completed' || t.status?.toLowerCase() === 'success'
+      t.status?.toUpperCase() === 'PAID'
     ).length;
     const pending = filteredTransactions.filter(t => 
-      t.status?.toLowerCase() === 'pending'
+      t.status?.toUpperCase() === 'PENDING'
     ).length;
-    const failed = filteredTransactions.filter(t => 
-      t.status?.toLowerCase() === 'failed' || t.status?.toLowerCase() === 'cancelled'
-    ).length;
+    const failed = 0; // No failed status in new system
     
     const totalAmount = filteredTransactions
-      .filter(t => t.status?.toLowerCase() === 'completed' || t.status?.toLowerCase() === 'success')
+      .filter(t => t.status?.toUpperCase() === 'PAID')
       .reduce((sum, t) => sum + (t.amount || 0), 0);
 
     return {
@@ -110,6 +108,29 @@ export const useTransactionManagement = () => {
       setLoading(false);
     }
   }, []);
+
+  // Update transaction status
+  const updateTransactionStatus = useCallback(async (id: string | number, status: 'PENDING' | 'PAID') => {
+    try {
+      setLoading(true);
+      await transactionService.updateTransactionStatus(id, status);
+      
+      // Refresh the transaction list after update
+      await fetchTransactions(searchText, pagination.current, pagination.pageSize);
+      // Stats will be updated automatically via useMemo
+      
+      toast.success(`Transaction status updated to ${status.toLowerCase()} successfully!`);
+      return { success: true };
+    } catch (err: any) {
+      console.error("Error updating transaction status:", err);
+      const errorMessage = err.message || "Failed to update transaction status";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  }, [searchText, pagination.current, pagination.pageSize, fetchTransactions]);
 
   // Delete transaction
   const deleteTransaction = useCallback(async (id: string | number) => {
@@ -231,6 +252,7 @@ export const useTransactionManagement = () => {
     
     // Actions
     fetchTransactions,
+    updateTransactionStatus,
     deleteTransaction,
     getTransactionById,
     getTransactionsByUserId,

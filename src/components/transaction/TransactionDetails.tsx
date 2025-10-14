@@ -37,15 +37,11 @@ const TransactionDetails: React.FC<TransactionDetailsProps> = ({
 
   // Get status color for Tag
   const getStatusColor = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case 'completed':
-      case 'success':
+    switch (status?.toUpperCase()) {
+      case 'PAID':
         return 'success';
-      case 'pending':
+      case 'PENDING':
         return 'warning';
-      case 'failed':
-      case 'cancelled':
-        return 'error';
       default:
         return 'default';
     }
@@ -102,7 +98,7 @@ const TransactionDetails: React.FC<TransactionDetailsProps> = ({
           }}>
             <div style={{ marginBottom: '12px' }}>
               <Tag color={getStatusColor(transaction.status)} style={{ fontSize: '16px', padding: '8px 16px', margin: 0 }}>
-                {transaction.status?.toUpperCase()}
+                {transaction.status?.toUpperCase() === 'PAID' ? 'Paid' : 'Pending'}
               </Tag>
             </div>
             <div style={{ color: '#6b7280', fontSize: '14px' }}>
