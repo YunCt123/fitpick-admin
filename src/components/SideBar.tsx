@@ -10,7 +10,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ChefHat,
-  CreditCard
+  CreditCard,
+  Package
 } from 'lucide-react';
 import { authService } from '../services/auth.service';
 import { toast } from 'react-toastify';
@@ -93,8 +94,8 @@ const SideBar: React.FC<SideBarProps> = ({
     { icon: Home, label: 'Dashboard', path: '/dashboard' },
     { icon: TrendingUp, label: 'Analytics', path: '/dashboard/analytics' },
     { icon: Users, label: 'Users', path: '/dashboard/users' },
-    { icon: FileText, label: 'Blogs', path: '/dashboard/blogs' },
     { icon: ChefHat, label: 'Meals', path: '/dashboard/meals' },
+    { icon: Package, label: 'Ingredients', path: '/dashboard/ingredients' },
     { icon: CreditCard, label: 'Transactions', path: '/dashboard/transactions' },
     
   ];

@@ -12,6 +12,7 @@ import DashboardHome from "./pages/DashboardHome";
 import Blogs from "./pages/Blogs";
 import ManageUser from "./pages/ManageUser";
 import Meal from "./pages/Meal";
+import Ingredients from "./pages/Ingredients";
 import Transactions from "./pages/Transactions";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
@@ -69,7 +70,7 @@ function App() {
           <Route path="users" element={<ManageUser />} />
           <Route path="meals" element={<Meal />} />
           <Route path="analytics" element={<Analytics />} />
-          <Route path="blogs" element={<Blogs />} />
+          <Route path="ingredients" element={<Ingredients />} />
           <Route path="transactions" element={<Transactions />} />
         </Route>
 

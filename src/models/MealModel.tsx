@@ -13,6 +13,12 @@ export interface Meal {
   isPremium: boolean;
   createdbyNavigation: any | null; // tùy backend trả về
   status: any | null; // tùy backend trả về
+  mealInstructions?: Array<{ instruction: string; stepNumber: number; instructionId?: number }>;
+  mealIngredients?: Array<{ ingredientid?: number; ingredientId?: number; quantity: number; ingredient?: { ingredientid?: number; ingredientId?: number; name?: string } }>;
+  protein?: number;
+  carbs?: number;
+  fat?: number;
+  imageUrl?: string;
 }
 
 

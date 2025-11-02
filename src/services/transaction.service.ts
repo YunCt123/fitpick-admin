@@ -16,8 +16,42 @@ export const transactionService = {
 		dateRange?: string;
 		startDate?: string;
 		endDate?: string;
-	}, config = {}): Promise<ApiResponse<PaymentResponse[]>> => {
-		const response = await apiUtils.get<ApiResponse<PaymentResponse[]>>(TRANSACTIONS, params, config);
+	}, config = {}): Promise<ApiResponse<any>> => {
+		// Map frontend params to backend params
+		const backendParams: any = {
+			page: params?.page || 1,
+			pageSize: params?.pageSize || 10,
+			search: params?.search,
+			status: params?.status,
+			userId: params?.userId
+		};
+		
+		// Remove undefined values
+		Object.keys(backendParams).forEach(key => 
+			backendParams[key] === undefined && delete backendParams[key]
+		);
+
+		const response = await apiUtils.get<any>(TRANSACTIONS, backendParams, config);
+		
+		// Transform response if it's paginated
+		if (response.data && response.data.data) {
+			const backendData = response.data.data;
+			if (backendData.items && Array.isArray(backendData.items)) {
+				// It's a paginated response
+				return {
+					success: response.data.success,
+					data: {
+						items: backendData.items,
+						totalItems: backendData.totalItems || 0,
+						totalPages: backendData.totalPages || 0,
+						pageSize: backendData.pageSize || params?.pageSize || 10,
+						pageNumber: backendData.pageNumber || backendParams.page || 1
+					},
+					message: response.data.message
+				};
+			}
+		}
+		
 		return response.data;
 	},
 
@@ -45,7 +79,7 @@ export const transactionService = {
 	updateTransactionStatus: async (id: string | number, status: 'PENDING' | 'PAID', config = {}): Promise<ApiResponse<PaymentResponse>> => {
 		const response = await apiUtils.put<ApiResponse<PaymentResponse>>(
 			`${TRANSACTIONS}/${id}/status`, 
-			{ status }, 
+			{ status: status.toUpperCase() }, 
 			config
 		);
 		return response.data;
