@@ -1,99 +1,121 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TrendingUp, TrendingDown, Users, Eye } from 'lucide-react';
+import { analyticsService, type AnalyticsData } from '../services/analytics.service';
+
+// Color mappings for dynamic colors
+const dietColors = ['bg-orange-500', 'bg-green-500', 'bg-emerald-500', 'bg-blue-500', 'bg-purple-500', 'bg-pink-500', 'bg-yellow-500'];
+const ageColors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500'];
 
 const Analytics: React.FC = () => {
-  // Sample data for the analytics - User Overview
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  
+  // Time period filters
+  const [userPeriod, setUserPeriod] = useState<'month' | 'quarter' | 'year'>('month');
+  const [dietPeriod, setDietPeriod] = useState<'month' | 'quarter' | 'year'>('month');
+  const [mealPeriod, setMealPeriod] = useState<'week' | 'month' | 'quarter'>('week');
+
+  const fetchAnalytics = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await analyticsService.getAnalytics({
+        userPeriod,
+        dietPeriod,
+        mealPeriod
+      });
+      
+      if (response.success && response.data) {
+        setAnalytics(response.data);
+      } else {
+        setError('Không thể tải dữ liệu analytics');
+      }
+    } catch (err: any) {
+      console.error('Error fetching analytics:', err);
+      setError(err.message || 'Có lỗi xảy ra khi tải dữ liệu');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAnalytics();
+  }, [userPeriod, dietPeriod, mealPeriod]);
+
+  // Format number with commas
+  const formatNumber = (num: number): string => {
+    return num.toLocaleString('en-US');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-3 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Đang tải dữ liệu...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !analytics) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-3">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl">
+          <p>{error || 'Không thể tải dữ liệu analytics'}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Build KPI data
   const kpiData = [
     {
       title: 'Tổng người dùng',
-      value: '12,543',
+      value: formatNumber(analytics.kpi.totalUsers),
       color: 'bg-gradient-to-r from-blue-400 to-blue-600',
       icon: Users,
       isPercentage: false
     },
     {
       title: 'DAU (Hoạt động hàng ngày)',
-      value: '3,205',
+      value: formatNumber(analytics.kpi.dau),
       color: 'bg-gradient-to-r from-green-400 to-green-600',
       icon: Eye,
       isPercentage: false
     },
     {
       title: 'MAU (Hoạt động hàng tháng)', 
-      value: '8,932',
+      value: formatNumber(analytics.kpi.mau),
       color: 'bg-gradient-to-r from-purple-400 to-purple-600',
       icon: TrendingUp,
       isPercentage: false
     },
     {
       title: 'Tăng trưởng tuần',
-      value: '12.5%',
+      value: `${analytics.kpi.weeklyGrowth >= 0 ? '+' : ''}${analytics.kpi.weeklyGrowth.toFixed(1)}%`,
       color: 'bg-gradient-to-r from-orange-400 to-orange-600',
       icon: TrendingUp,
       isPercentage: true
     }
   ];
 
-  const dietData = [
-    { name: 'Keto', value: 3542, percentage: 28, color: 'bg-orange-500' },
-    { name: 'Eat Clean', value: 2814, percentage: 23, color: 'bg-green-500' },
-    { name: 'Chay/Thuần chay', value: 2156, percentage: 17, color: 'bg-emerald-500' },
-    { name: 'Không gluten', value: 1654, percentage: 13, color: 'bg-blue-500' },
-    { name: 'Khác', value: 2377, percentage: 19, color: 'bg-purple-500' }
-  ];
+  // Map diet plans with colors
+  const dietData = analytics.dietPlans.map((diet, index) => ({
+    ...diet,
+    color: dietColors[index % dietColors.length]
+  }));
 
-  const genderData = {
-    male: 6543,
-    female: 5234,
-    other: 766,
-    malePercentage: 52,
-    femalePercentage: 42,
-    otherPercentage: 6
-  };
+  const genderData = analytics.gender;
+  
+  // Map age groups with colors and descriptions
+  const ageGroups = analytics.ageGroups.map((group, index) => ({
+    ...group,
+    color: ageColors[index % ageColors.length]
+  }));
 
-  const ageGroups = [
-    { 
-      name: 'Gen Z (18-25)', 
-      count: 4521, 
-      percentage: 36, 
-      color: 'bg-blue-500',
-      description: 'Thế hệ số hóa, yêu thích công nghệ'
-    },
-    { 
-      name: 'Millennials (26-35)', 
-      count: 5234, 
-      percentage: 42, 
-      color: 'bg-green-500',
-      description: 'Thế hệ Y, quan tâm sức khỏe'
-    },
-    { 
-      name: 'Gen X (36-45)', 
-      count: 2134, 
-      percentage: 17, 
-      color: 'bg-purple-500',
-      description: 'Thế hệ X, có thu nhập ổn định'
-    },
-    { 
-      name: 'Boomers (>45)', 
-      count: 654, 
-      percentage: 5, 
-      color: 'bg-orange-500',
-      description: 'Thế hệ trưởng thành, quan tâm dinh dưỡng'
-    }
-  ];
-
-
-
-  const popularMeals = [
-    { name: 'Salad bơ', orders: 1523, percentage: 18.5, trend: 'up' },
-    { name: 'Gà nướng kiểu Địa Trung Hải', orders: 1342, percentage: 16.3, trend: 'up' },
-    { name: 'Cơm quinoa với rau củ', orders: 1156, percentage: 14.0, trend: 'up' },
-    { name: 'Smoothie xanh detox', orders: 987, percentage: 12.0, trend: 'down' },
-    { name: 'Cá hồi nướng', orders: 834, percentage: 10.1, trend: 'up' },
-    { name: 'Bánh yến mạch', orders: 723, percentage: 8.8, trend: 'up' },
-    { name: 'Súp lơ xanh', orders: 612, percentage: 7.4, trend: 'down' },
-    { name: 'Yogurt Hy Lạp', orders: 445, percentage: 5.4, trend: 'up' }
-  ];
+  const popularMeals = analytics.popularMeals || [];
 
   return (
     <div className="min-h-screen bg-gray-50 p-3 overflow-y-auto">
@@ -125,10 +147,14 @@ const Analytics: React.FC = () => {
         <div className="bg-white rounded-lg shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Phân nhóm người dùng</h3>
-            <select className="text-sm border border-gray-200 rounded px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
-              <option>Tháng này</option>
-              <option>Quý này</option>
-              <option>Năm nay</option>
+            <select 
+              value={userPeriod}
+              onChange={(e) => setUserPeriod(e.target.value as 'month' | 'quarter' | 'year')}
+              className="text-sm border border-gray-200 rounded px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              <option value="month">Tháng này</option>
+              <option value="quarter">Quý này</option>
+              <option value="year">Năm nay</option>
             </select>
           </div>
 
@@ -177,7 +203,8 @@ const Analytics: React.FC = () => {
           {/* Age Groups Section */}
             <h4 className="text-sm font-semibold text-gray-700 mb-4">Phân bố theo thế hệ:</h4>
             <div className="space-y-3">
-              {ageGroups.map((group, index) => (
+              {ageGroups.length > 0 ? (
+                ageGroups.map((group, index) => (
                 <div key={index} className="bg-gray-50 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-2">
@@ -196,17 +223,24 @@ const Analytics: React.FC = () => {
                         style={{ width: `${group.percentage}%` }}
                       ></div>
                     </div>
-                    <span className="text-xs text-gray-600 min-w-fit">{group.count.toLocaleString()} người</span>
+                    <span className="text-xs text-gray-600 min-w-fit">{formatNumber(group.count)} người</span>
                   </div>
                 </div>
-              ))}
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  Chưa có dữ liệu nhóm tuổi
+                </div>
+              )}
             </div>
 
           {/* Summary Stats */}
           <div className="mt-4 pt-4 border-t">
             <div className="text-center">
               <div className="text-sm text-gray-600">Nhóm tuổi phổ biến nhất</div>
-              <div className="text-lg font-bold text-green-600">Millennials (42%)</div>
+              <div className="text-lg font-bold text-green-600">
+                {ageGroups.length > 0 && ageGroups[0] ? `${ageGroups[0].name.split(' ')[0]} (${ageGroups[0].percentage}%)` : 'N/A'}
+              </div>
             </div>
           </div>
         </div>
@@ -215,40 +249,69 @@ const Analytics: React.FC = () => {
         <div className="bg-white rounded-lg shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Xu hướng chế độ ăn</h3>
-            <select className="text-sm border border-gray-200 rounded px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
-              <option>Tháng này</option>
-              <option>Quý này</option>
-              <option>Năm nay</option>
+            <select 
+              value={dietPeriod}
+              onChange={(e) => setDietPeriod(e.target.value as 'month' | 'quarter' | 'year')}
+              className="text-sm border border-gray-200 rounded px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              <option value="month">Tháng này</option>
+              <option value="quarter">Quý này</option>
+              <option value="year">Năm nay</option>
             </select>
           </div>
 
           {/* Pie Chart representation - Larger */}
-          <div className="relative w-60 h-60 mx-auto mb-5">
-            <div className="w-full h-full rounded-full relative overflow-hidden">
-              <div 
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: `conic-gradient(
-                    #f97316 0% 28%, 
-                    #10b981 28% 51%, 
-                    #059669 51% 68%, 
-                    #3b82f6 68% 81%, 
-                    #8b5cf6 81% 100%
-                  )`
-                }}
-              ></div>
-              <div className="absolute inset-8 bg-white rounded-full flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-sm font-bold text-gray-700">Diet</div>
-                  <div className="text-xs text-gray-500">{dietData.reduce((sum, diet) => sum + diet.value, 0).toLocaleString()}</div>
+          {(() => {
+            // Build conic gradient dynamically
+            let currentPercent = 0;
+            const gradientStops = dietData.map((diet, _index) => {
+              const startPercent = currentPercent;
+              const endPercent = currentPercent + diet.percentage;
+              currentPercent = endPercent;
+              
+              // Map to actual hex colors
+              const colorMap: { [key: string]: string } = {
+                'bg-orange-500': '#f97316',
+                'bg-green-500': '#10b981',
+                'bg-emerald-500': '#059669',
+                'bg-blue-500': '#3b82f6',
+                'bg-purple-500': '#8b5cf6',
+                'bg-pink-500': '#ec4899',
+                'bg-yellow-500': '#eab308'
+              };
+              
+              const color = colorMap[diet.color] || '#6b7280';
+              return `${color} ${startPercent}% ${endPercent}%`;
+            }).join(', ');
+            
+            const totalDiet = dietData.reduce((sum, diet) => sum + diet.value, 0);
+            
+            return (
+              <div className="relative w-60 h-60 mx-auto mb-5">
+                <div className="w-full h-full rounded-full relative overflow-hidden">
+                  {dietData.length > 0 && (
+                    <div 
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: `conic-gradient(${gradientStops})`
+                      }}
+                    ></div>
+                  )}
+                  <div className="absolute inset-8 bg-white rounded-full flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-gray-700">Diet</div>
+                      <div className="text-xs text-gray-500">{formatNumber(totalDiet)}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            );
+          })()}
 
           {/* Enhanced Diet Data Display */}
           <div className="space-y-4">
-            {dietData.map((diet, index) => (
+            {dietData.length > 0 ? (
+              dietData.map((diet, index) => (
               <div key={index} className="bg-gray-50 rounded-lg p-3">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
@@ -264,17 +327,24 @@ const Analytics: React.FC = () => {
                       style={{ width: `${diet.percentage}%` }}
                     ></div>
                   </div>
-                  <span className="text-xs text-gray-600 min-w-fit">{diet.value.toLocaleString()} người</span>
+                  <span className="text-xs text-gray-600 min-w-fit">{formatNumber(diet.value)} người</span>
                 </div>
               </div>
-            ))}
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                Chưa có dữ liệu chế độ ăn
+              </div>
+            )}
           </div>
 
           {/* Summary Stats */}
           <div className="mt-5 pt-4 border-t">
             <div className="text-center">
               <div className="text-sm text-gray-600">Chế độ ăn phổ biến nhất</div>
-              <div className="text-lg font-bold text-orange-600">Keto (28%)</div>
+              <div className="text-lg font-bold text-orange-600">
+                {dietData.length > 0 ? `${dietData[0].name} (${dietData[0].percentage}%)` : 'N/A'}
+              </div>
             </div>
           </div>
         </div>
@@ -284,16 +354,22 @@ const Analytics: React.FC = () => {
       <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-800">Top món ăn phổ biến</h3>
-          <select className="text-sm border border-gray-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Tuần này</option>
-            <option>Tháng này</option>
-            <option>Quý này</option>
+          <select 
+            value={mealPeriod}
+            onChange={(e) => setMealPeriod(e.target.value as 'week' | 'month' | 'quarter')}
+            className="text-sm border border-gray-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="week">Tuần này</option>
+            <option value="month">Tháng này</option>
+            <option value="quarter">Quý này</option>
           </select>
         </div>
 
         <div className="text-center mb-4">
-          <div className="text-2xl font-bold text-gray-800">8,622</div>
-          <div className="text-sm text-gray-500">Tổng lượt đặt món trong tuần</div>
+          <div className="text-2xl font-bold text-gray-800">{formatNumber(analytics.totalMealOrders)}</div>
+          <div className="text-sm text-gray-500">
+            Tổng lượt đặt món {mealPeriod === 'week' ? 'trong tuần' : mealPeriod === 'month' ? 'trong tháng' : 'trong quý'}
+          </div>
         </div>
 
         {/* Table */}
@@ -309,21 +385,29 @@ const Analytics: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {popularMeals.map((meal, index) => (
-                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-2 font-semibold text-gray-500 text-lg">{index + 1}</td>
-                  <td className="py-3 px-2 text-gray-700 font-medium">{meal.name}</td>
-                  <td className="py-3 px-2 text-right text-gray-600 font-semibold">{meal.orders.toLocaleString()}</td>
-                  <td className="py-3 px-2 text-right text-gray-600 font-semibold">{meal.percentage}%</td>
-                  <td className="py-3 px-2 text-right">
-                    {meal.trend === 'up' ? (
-                      <TrendingUp className="w-5 h-5 text-green-500 inline" />
-                    ) : (
-                      <TrendingDown className="w-5 h-5 text-red-500 inline" />
-                    )}
+              {popularMeals.length > 0 ? (
+                popularMeals.map((meal) => (
+                  <tr key={meal.rank} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <td className="py-3 px-2 font-semibold text-gray-500 text-lg">{meal.rank}</td>
+                    <td className="py-3 px-2 text-gray-700 font-medium">{meal.name}</td>
+                    <td className="py-3 px-2 text-right text-gray-600 font-semibold">{formatNumber(meal.orders)}</td>
+                    <td className="py-3 px-2 text-right text-gray-600 font-semibold">{meal.percentage}%</td>
+                    <td className="py-3 px-2 text-right">
+                      {meal.trend === 'up' ? (
+                        <TrendingUp className="w-5 h-5 text-green-500 inline" />
+                      ) : (
+                        <TrendingDown className="w-5 h-5 text-red-500 inline" />
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-gray-500">
+                    Chưa có dữ liệu món ăn trong tuần này
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

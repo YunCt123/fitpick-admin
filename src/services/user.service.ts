@@ -10,13 +10,51 @@ export const userService = {
 		page?: number;
 		pageSize?: number;
 		search?: string;
+		searchKeyword?: string;
 		sortBy?: string;
 		sortDesc?: boolean;
 		genderId?: number;
 		roleId?: number;
 		status?: boolean;
-	}, config = {}): Promise<ApiResponse<User[]>> => {
-		const response = await apiUtils.get<ApiResponse<User[]>>(MANAGE_USER, params, config);
+	}, config = {}): Promise<ApiResponse<any>> => {
+		// Map frontend params to backend params
+		const backendParams: any = {
+			page: params?.page || 1,
+			pageSize: params?.pageSize || 10,
+			searchKeyword: params?.searchKeyword || params?.search,
+			sortBy: params?.sortBy || "createdat",
+			sortDesc: params?.sortDesc ?? true,
+			genderId: params?.genderId,
+			roleId: params?.roleId,
+			status: params?.status
+		};
+		
+		// Remove undefined values
+		Object.keys(backendParams).forEach(key => 
+			backendParams[key] === undefined && delete backendParams[key]
+		);
+
+		const response = await apiUtils.get<any>(MANAGE_USER, backendParams, config);
+		
+		// Transform response if it's paginated
+		if (response.data && response.data.data) {
+			const backendData = response.data.data;
+			if (backendData.items && Array.isArray(backendData.items)) {
+				// It's a paginated response
+				return {
+					success: response.data.success,
+					data: {
+						items: backendData.items,
+						totalItems: backendData.totalItems || 0,
+						totalPages: backendData.totalPages || 0,
+						pageSize: backendData.pageSize || params?.pageSize || 10,
+						pageNumber: backendData.pageNumber || backendParams.page || 1
+					},
+					message: response.data.message
+				};
+			}
+		}
+		
 		return response.data;
 	},
 

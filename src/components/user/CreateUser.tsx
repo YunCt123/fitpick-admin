@@ -46,31 +46,33 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
       
       console.log('Form values received:', values);
       
-      // Prepare JSON body instead of FormData (backend expects application/json)
-      // Only include numeric / optional fields if user provided them
+      // Map to backend API format (PascalCase)
       const userData: Record<string, any> = {
-        fullName: values.fullName?.trim(),
-        email: values.email?.trim(),
-        password: values.password,
-        country: values.country?.trim(),
-        city: values.city?.trim(),
-        roleId: values.role,
+        FullName: values.fullName?.trim(),
+        Email: values.email?.trim(),
+        Password: values.password,
+        RoleId: values.role,
       };
 
-      // Append optional numeric fields if defined (avoid sending undefined)
-      const optionalNumericFields = ['gender', 'age', 'height', 'weight'] as const;
-      optionalNumericFields.forEach((field) => {
-        const keyMap: Record<string, string> = {
-          gender: 'genderId',
-          age: 'age',
-          height: 'height',
-          weight: 'weight'
-        };
-        const val = values[field];
-        if (val !== undefined && val !== null && val !== '') {
-          userData[keyMap[field]] = Number(val);
-        }
-      });
+      // Append optional fields if defined (backend expects PascalCase)
+      if (values.country) {
+        userData.Country = values.country.trim();
+      }
+      if (values.city) {
+        userData.City = values.city.trim();
+      }
+      if (values.gender !== undefined && values.gender !== null && values.gender !== '') {
+        userData.GenderId = Number(values.gender);
+      }
+      if (values.age !== undefined && values.age !== null && values.age !== '') {
+        userData.Age = Number(values.age);
+      }
+      if (values.height !== undefined && values.height !== null && values.height !== '') {
+        userData.Height = Number(values.height);
+      }
+      if (values.weight !== undefined && values.weight !== null && values.weight !== '') {
+        userData.Weight = Number(values.weight);
+      }
 
       console.log('User JSON payload to send:', userData);
       await userService.createUser(userData);

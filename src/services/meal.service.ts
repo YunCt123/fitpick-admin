@@ -9,6 +9,10 @@ export interface MealQueryParams {
   statusId?: number;
   categoryId?: number;
   isPremium?: boolean;
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDesc?: boolean;
 }
 
 class MealService {
@@ -19,14 +23,64 @@ class MealService {
    */
   async getMeals(params?: MealQueryParams): Promise<ApiResponse<Meal[]>> {
     try {
-      const response = await axios.get<ApiResponse<Meal[]>>(this.baseUrl, {
-        params: {
-          ...params,
-          // Convert boolean to string for API
-          isPremium: params?.isPremium !== undefined ? params.isPremium.toString() : undefined
-        }
+      // Map frontend params to backend params
+      const backendParams: any = {
+        categoryId: params?.categoryId,
+        dietType: params?.diettype,
+        statusId: params?.statusId,
+        search: params?.search,
+        sortBy: params?.sortBy || "createdat",
+        sortDesc: params?.sortDesc !== undefined ? params.sortDesc : true,
+        page: params?.page || 0,
+        pageSize: params?.pageSize || 0,
+      };
+      
+      // Remove undefined values
+      Object.keys(backendParams).forEach(key => 
+        backendParams[key] === undefined && delete backendParams[key]
+      );
+
+      const response = await axios.get<ApiResponse<any>>(this.baseUrl, {
+        params: backendParams
       });
-      return response.data;
+
+      // Check if response is paginated
+      if (params?.page && params?.pageSize && response.data.success && response.data.data?.items) {
+        return {
+          success: response.data.success,
+          data: response.data.data.items,
+          message: response.data.message,
+          totalItems: response.data.data.totalItems,
+          totalPages: response.data.data.totalPages
+        } as any;
+      }
+      
+      // Fallback to old format (non-paginated)
+      const meals = response.data.success && response.data.data ? response.data.data : [];
+      
+      // Client-side filtering if needed (fallback)
+      let filteredMeals = meals;
+      if (params?.search && !params.page) {
+        const searchLower = params.search.toLowerCase();
+        filteredMeals = filteredMeals.filter((meal: Meal) => 
+          meal.name?.toLowerCase().includes(searchLower) ||
+          meal.description?.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      if (params?.diettype && !params.page) {
+        filteredMeals = filteredMeals.filter((meal: Meal) => meal.diettype === params.diettype);
+      }
+      
+      if (params?.statusId !== undefined && !params.page) {
+        filteredMeals = filteredMeals.filter((meal: Meal) => meal.statusId === params.statusId);
+      }
+
+      return {
+        success: response.data.success,
+        data: filteredMeals,
+        message: response.data.message
+      };
     } catch (error) {
       console.error('Error fetching meals:', error);
       throw error;
@@ -136,6 +190,30 @@ class MealService {
       return await this.updateMeal(id, updatedMeal);
     } catch (error) {
       console.error(`Error toggling premium status with id ${id}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Upload meal image
+   */
+  async uploadMealImage(mealId: number, file: File): Promise<ApiResponse<any>> {
+    try {
+      const formData = new FormData();
+      formData.append('File', file);
+
+      const response = await axios.put<ApiResponse<any>>(
+        `${this.baseUrl}/${mealId}/image`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error uploading image for meal with id ${mealId}:`, error);
       throw error;
     }
   }

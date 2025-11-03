@@ -12,7 +12,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // Check both localStorage and sessionStorage for token
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     if (token) {
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
@@ -37,6 +38,24 @@ api.interceptors.response.use(
   (error) => {
     // Enhanced error logging
     if (error.response) {
+      // Handle 401 Unauthorized - token expired or invalid
+      if (error.response.status === 401) {
+        // Clear authentication data
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        localStorage.removeItem('expiresIn');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('refreshToken');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('expiresIn');
+        
+        // Redirect to login if not already there
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
+      }
+      
       console.error('API Error Response:', {
         status: error.response.status,
         statusText: error.response.statusText,
