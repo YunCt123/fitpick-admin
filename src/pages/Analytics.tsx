@@ -264,7 +264,7 @@ const Analytics: React.FC = () => {
           {(() => {
             // Build conic gradient dynamically
             let currentPercent = 0;
-            const gradientStops = dietData.map((diet, index) => {
+            const gradientStops = dietData.map((diet, _index) => {
               const startPercent = currentPercent;
               const endPercent = currentPercent + diet.percentage;
               currentPercent = endPercent;

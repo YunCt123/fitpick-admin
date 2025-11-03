@@ -4,7 +4,6 @@ import {
   Home, 
   Users, 
   TrendingUp, 
-  FileText, 
   LogOut, 
   Search,
   ChevronLeft,

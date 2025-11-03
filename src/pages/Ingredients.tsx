@@ -16,7 +16,7 @@ const Ingredients: React.FC = () => {
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, _setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -45,9 +45,9 @@ const Ingredients: React.FC = () => {
       
       if (response.success && response.data) {
         setIngredients(response.data);
-        if (response.totalItems !== undefined) {
-          setTotalItems(response.totalItems);
-          setTotalPages(response.totalPages || 1);
+        if ((response.data as any).totalItems !== undefined) {
+          setTotalItems((response.data as any).totalItems);
+          setTotalPages((response.data as any).totalPages || 1);
         }
       } else {
         setError(response.message || 'Failed to fetch ingredients');

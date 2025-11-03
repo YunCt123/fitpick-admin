@@ -9,7 +9,6 @@ import DashBoard from "./pages/DashBoard";
 import Login from "./pages/Login";
 import Analytics from "./pages/Analytics";
 import DashboardHome from "./pages/DashboardHome";
-import Blogs from "./pages/Blogs";
 import ManageUser from "./pages/ManageUser";
 import Meal from "./pages/Meal";
 import Ingredients from "./pages/Ingredients";

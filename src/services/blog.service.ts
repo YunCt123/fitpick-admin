@@ -98,8 +98,8 @@ export const blogService = {
     // Handle files if present
     if (data.medias && Array.isArray(data.medias)) {
       data.medias.forEach((media) => {
-        if (media.mediaUrl instanceof File) {
-          formData.append('files', media.mediaUrl);
+        if (typeof media.mediaUrl === 'object' && media.mediaUrl !== null) {
+          formData.append('files', media.mediaUrl as any);
         }
       });
     }
@@ -125,9 +125,9 @@ export const blogService = {
     if (data.medias && Array.isArray(data.medias)) {
       // If medias are files, append them
       // This is a simplified version - you may need to adjust based on actual media handling
-      data.medias.forEach((media, index) => {
-        if (media.mediaUrl instanceof File) {
-          formData.append('files', media.mediaUrl);
+      data.medias.forEach((media) => {
+        if (typeof media.mediaUrl === 'object' && media.mediaUrl !== null) {
+          formData.append('files', media.mediaUrl as any);
         }
       });
     }

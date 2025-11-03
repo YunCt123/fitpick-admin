@@ -6,7 +6,7 @@ import { mealService } from '../../services/meal.service';
 import { ingredientService } from '../../services/ingredient.service';
 import { filterService } from '../../services/filter.service';
 import { apiUtils } from '../../api/axios';
-import type { Meal, UpdateMealRequest } from '../../models/MealModel';
+import type { Meal } from '../../models/MealModel';
 import type { ApiResponse } from '../../models/ApiResponse';
 
 const { TextArea } = Input;
