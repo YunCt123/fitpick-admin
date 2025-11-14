@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
-import FitPickAppQR from "../assets/FitPick_App.jpg";
+import FitPickAppQR from "../assets/FitPick_App.png";
 
 const DownloadApp = () => {
   const [copied, setCopied] = useState(false);
