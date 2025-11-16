@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Users, UserCheck, UserX, Crown } from "lucide-react";
 import StatsGrid, { type StatCard } from '../ui/StatsGrid';
+import { userService } from '../../services/user.service';
 
 interface UserStatsData {
   total: number;
@@ -12,15 +13,65 @@ interface UserStatsData {
 
 interface UserStatsProps {
   users: any[];
+  totalItems?: number;
   loading?: boolean;
 }
 
-const UserStats: React.FC<UserStatsProps> = ({ users, loading = false }) => {
-  // Calculate stats from users array
+const UserStats: React.FC<UserStatsProps> = ({ users, totalItems, loading: propsLoading = false }) => {
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [statsLoading, setStatsLoading] = useState(false);
+
+  // Fetch all users for accurate stats calculation
+  useEffect(() => {
+    const fetchAllUsersForStats = async () => {
+      // Use totalItems for accurate total count
+      if (!totalItems || totalItems <= 0) {
+        // Fallback to current page users if no totalItems
+        setAllUsers(users || []);
+        return;
+      }
+
+      // If totalItems is small (<= 100), fetch all users for accurate stats
+      // Otherwise, use current page users and estimate
+      if (totalItems <= 100) {
+        try {
+          setStatsLoading(true);
+          // Fetch all users with page size matching total items
+          const response = await userService.getUsers({ 
+            page: 1, 
+            pageSize: totalItems
+          });
+          
+          if (response?.data?.items && Array.isArray(response.data.items)) {
+            setAllUsers(response.data.items);
+          } else {
+            // Fallback to current page users
+            setAllUsers(users || []);
+          }
+        } catch (error) {
+          console.error('Error fetching all users for stats:', error);
+          // Fallback to using current page users
+          setAllUsers(users || []);
+        } finally {
+          setStatsLoading(false);
+        }
+      } else {
+        // For large datasets, use current page users and calculate based on ratio
+        setAllUsers(users || []);
+      }
+    };
+
+    fetchAllUsersForStats();
+  }, [totalItems]); // Only depend on totalItems to avoid infinite loop
+
+  // Calculate stats from all users for accuracy
   const calculateStats = (): UserStatsData => {
-    if (!users || users.length === 0) {
+    const usersForCalculation = allUsers.length > 0 ? allUsers : (users || []);
+    const total = totalItems ?? usersForCalculation.length;
+    
+    if (usersForCalculation.length === 0) {
       return {
-        total: 0,
+        total,
         active: 0,
         inactive: 0,
         premium: 0,
@@ -28,16 +79,47 @@ const UserStats: React.FC<UserStatsProps> = ({ users, loading = false }) => {
       };
     }
 
-    const total = users.length;
-    const active = users.filter(user => user.status === true).length;
-    const inactive = users.filter(user => user.status === false).length;
-    const premium = users.filter(user => user.roleId === 3).length; // Premium role
-    const admin = users.filter(user => user.roleId === 4).length; // Admin role
+    // Calculate counts from fetched users
+    const activeCount = usersForCalculation.filter(user => user.status === true).length;
+    const inactiveCount = usersForCalculation.filter(user => user.status === false).length;
+    const premiumCount = usersForCalculation.filter(user => user.roleId === 3).length; // Premium role
+    const adminCount = usersForCalculation.filter(user => user.roleId === 4).length; // Admin role
 
-    return { total, active, inactive, premium, admin };
+    // If we fetched all users (totalItems <= 100), use exact counts
+    if (totalItems && totalItems <= 100 && usersForCalculation.length === totalItems) {
+      return {
+        total: totalItems,
+        active: activeCount,
+        inactive: inactiveCount,
+        premium: premiumCount,
+        admin: adminCount
+      };
+    }
+
+    // If we have more users than fetched, estimate based on ratio
+    if (totalItems && totalItems > usersForCalculation.length && usersForCalculation.length > 0) {
+      const ratio = usersForCalculation.length / totalItems;
+      return {
+        total: totalItems,
+        active: Math.round(activeCount / ratio),
+        inactive: Math.round(inactiveCount / ratio),
+        premium: Math.round(premiumCount / ratio),
+        admin: Math.round(adminCount / ratio)
+      };
+    }
+
+    // Default: use exact counts from available users
+    return {
+      total,
+      active: activeCount,
+      inactive: inactiveCount,
+      premium: premiumCount,
+      admin: adminCount
+    };
   };
 
   const stats = calculateStats();
+  const loading = propsLoading || statsLoading;
 
   const statCards: StatCard[] = [
     {

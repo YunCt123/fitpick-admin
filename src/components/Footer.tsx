@@ -8,14 +8,14 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">FitPick</h3>
             <p className="text-gray-300">
-              Your trusted partner in achieving fitness and wellness goals.
+              Your trusted partner in achieving nutrition and wellness goals.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/home" className="text-gray-300 hover:text-white">
+                <Link to="/" className="text-gray-300 hover:text-white">
                   Home
                 </Link>
               </li>
@@ -29,25 +29,37 @@ const Footer = () => {
                   Download
                 </Link>
               </li>
+              <li>
+                <Link to="/contact" className="text-gray-300 hover:text-white">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-300">
-              <li>Email: support@fitpick.com</li>
-              <li>Phone: +84 123 456 789</li>
+              <li>Email: fitpick25.app@gmail.com</li>
+              <li>Phone: +84 819260507</li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Follow Us</h4>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-white">
+              <a 
+                href="https://www.facebook.com/profile.php?id=61579370962494" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-white transition-colors"
+              >
                 Facebook
               </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                Twitter
-              </a>
-              <a href="#" className="text-gray-300 hover:text-white">
+              <a 
+                href="https://www.instagram.com/fit_pick25/?next=%2Ffit_pick25%2F" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-white transition-colors"
+              >
                 Instagram
               </a>
             </div>
