@@ -16,21 +16,12 @@ const BannerCarousel = () => {
     },
     {
       id: 2,
-      title: 'Theo Dõi Tiến Độ Thông Minh',
-      description: 'Giám sát hành trình fitness với phân tích chi tiết và báo cáo tiến độ',
+      title: 'Tìm Kiếm Món Ăn Thông Minh',
+      description: 'Khám phá hàng nghìn món ăn với bộ lọc tiên tiến theo calo, nguyên liệu và thời gian nấu',
       buttonText: 'Tìm Hiểu Thêm',
       buttonLink: '/about',
       bgGradient: 'from-green-600 to-teal-600',
-      image: '📊'
-    },
-    {
-      id: 3,
-      title: 'Cộng Đồng Fitness Sôi Động',
-      description: 'Kết nối với hàng nghìn người dùng và chuyên gia để duy trì động lực',
-      buttonText: 'Tham Gia Ngay',
-      buttonLink: '/download',
-      bgGradient: 'from-orange-600 to-red-600',
-      image: '👥'
+      image: '🔍'
     }
   ];
 

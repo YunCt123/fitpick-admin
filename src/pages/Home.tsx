@@ -20,8 +20,8 @@ const Home = () => {
             Chào Mừng Đến Với <span className="text-purple-600">FitPick</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Người bạn đồng hành fitness tuyệt vời với kế hoạch ăn uống cá nhân hóa, theo dõi tập luyện, 
-            và đạt được mục tiêu sức khỏe. Tham gia cùng hàng nghìn người dùng trong hành trình fitness.
+            Người bạn đồng hành dinh dưỡng tuyệt vời với kế hoạch ăn uống cá nhân hóa, tìm kiếm món ăn thông minh,
+            và quản lý thực đơn hàng ngày. Đã có gần 100 người dùng tin tưởng và sử dụng FitPick.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -56,18 +56,18 @@ const Home = () => {
               </p>
               
               <p>
-                Dù bạn là một <strong>vận động viên chuyên nghiệp</strong> đang tìm kiếm chế độ dinh dưỡng 
-                tối ưu để nâng cao hiệu suất, một <strong>người cao tuổi</strong> cần chăm sóc sức khỏe đặc biệt, 
-                một <strong>trẻ em</strong> đang trong giai đoạn phát triển, hay những người có các 
-                <strong>nhu cầu ăn kiêng đặc biệt</strong> như chế độ ăn thuần chay, ketogenic, hoặc 
-                không gluten - FitPick đều có giải pháp phù hợp dành cho bạn.
+                FitPick cung cấp các tính năng mạnh mẽ để hỗ trợ bạn trong việc quản lý dinh dưỡng hàng ngày. 
+                Ứng dụng cho phép bạn <strong>tạo kế hoạch ăn uống cá nhân hóa</strong> dựa trên thông tin sức khỏe 
+                và mục tiêu của bạn, <strong>tìm kiếm và lọc món ăn</strong> theo calo, nguyên liệu, thời gian nấu 
+                và nhiều tiêu chí khác, <strong>quản lý thực đơn hàng ngày và theo tuần</strong>, 
+                và <strong>theo dõi thống kê dinh dưỡng</strong> để đảm bảo bạn đáp ứng đúng nhu cầu dinh dưỡng.
               </p>
               
               <p>
-                Sức mạnh thực sự của FitPick nằm ở khả năng <strong>học hỏi và thích nghi</strong> với 
-                sở thích, mục tiêu sức khỏe và lối sống của bạn. Thông qua thuật toán AI tiên tiến, 
-                ứng dụng không chỉ đề xuất các món ăn ngon mà còn đảm bảo chúng đáp ứng đúng nhu cầu 
-                dinh dưỡng cụ thể của bạn, giúp bạn đạt được mục tiêu sức khỏe một cách bền vững và hiệu quả.
+                Với thuật toán <strong>AI thông minh</strong>, FitPick học hỏi từ sở thích và hành vi ăn uống của bạn 
+                để đưa ra những gợi ý món ăn phù hợp nhất. Bạn có thể <strong>lưu món ăn yêu thích</strong> và 
+                <strong>đánh giá món ăn</strong> để cùng nhau xây dựng thói quen ăn uống lành mạnh. 
+                Hơn 50% người dùng đánh giá app phù hợp và hữu ích cho nhu cầu dinh dưỡng của họ.
               </p>
             </div>
           </div>
@@ -79,33 +79,33 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Cá Nhân Hóa Hoàn Toàn</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Kế Hoạch Ăn Cá Nhân Hóa</h3>
               <p className="text-gray-600">
-                Phù hợp với mọi đối tượng từ vận động viên, người cao tuổi, trẻ em đến những người có nhu cầu ăn kiêng đặc biệt
+                Tạo thực đơn hàng ngày và theo tuần dựa trên thông tin sức khỏe và mục tiêu dinh dưỡng của bạn
               </p>
             </div>
             
             <div className="text-center p-6 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">AI Thông Minh</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Tìm Kiếm Thông Minh</h3>
               <p className="text-gray-600">
-                Thuật toán AI tiên tiến học hỏi sở thích và thích nghi với mục tiêu sức khỏe của bạn
+                Tìm kiếm và lọc món ăn theo nhiều tiêu chí: calo, nguyên liệu, thời gian nấu, loại món
               </p>
             </div>
             
             <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Hiệu Quả Bền Vững</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Theo Dõi Dinh Dưỡng</h3>
               <p className="text-gray-600">
-                Giúp bạn đạt được mục tiêu sức khỏe một cách bền vững và hiệu quả lâu dài
+                Theo dõi thống kê calo, protein, carbs, và fat để đảm bảo đáp ứng đúng nhu cầu dinh dưỡng
               </p>
             </div>
           </div>
@@ -119,7 +119,7 @@ const Home = () => {
             Tại Sao Chọn FitPick?
           </h2>
           <p className="text-lg text-gray-600">
-            Khám phá các tính năng giúp FitPick trở thành người bạn đồng hành fitness hoàn hảo
+            Khám phá các tính năng giúp FitPick trở thành người bạn đồng hành dinh dưỡng hoàn hảo
           </p>
         </div>
 
@@ -132,31 +132,31 @@ const Home = () => {
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Kế Hoạch Ăn Cá Nhân Hóa</h3>
             <p className="text-gray-600">
-              Nhận kế hoạch dinh dưỡng được thiết kế riêng cho sở thích ăn uống và mục tiêu fitness của bạn.
+              Nhận kế hoạch dinh dưỡng được thiết kế riêng cho sở thích ăn uống và mục tiêu sức khỏe của bạn.
             </p>
           </div>
 
           <div className="text-center p-6">
             <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Theo Dõi Tiến Độ</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Quản Lý Yêu Thích</h3>
             <p className="text-gray-600">
-              Giám sát hành trình fitness với phân tích chi tiết và báo cáo tiến độ.
+              Lưu lại những món ăn yêu thích và dễ dàng truy cập lại bất cứ lúc nào.
             </p>
           </div>
 
           <div className="text-center p-6">
             <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Cộng Đồng Chuyên Gia</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Đánh Giá Món Ăn</h3>
             <p className="text-gray-600">
-              Kết nối với các chuyên gia fitness và cộng đồng hỗ trợ để duy trì động lực.
+              Đánh giá và chia sẻ trải nghiệm về các món ăn để giúp người dùng khác lựa chọn phù hợp.
             </p>
           </div>
         </div>
@@ -166,10 +166,10 @@ const Home = () => {
       <div className="bg-purple-600 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Sẵn Sàng Bắt Đầu Hành Trình Fitness?
+            Sẵn Sàng Bắt Đầu Hành Trình Dinh Dưỡng?
           </h2>
           <p className="text-xl text-purple-100 mb-8">
-            Tải ứng dụng di động FitPick và bước đầu tiên hướng tới một bạn khỏe mạnh hơn.
+            Tải ứng dụng di động FitPick và bước đầu tiên hướng tới một chế độ ăn uống lành mạnh hơn.
           </p>
           <Link
             to="/download"

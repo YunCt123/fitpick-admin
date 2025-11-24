@@ -29,8 +29,6 @@ export const useUserManagement = () => {
       setLoading(true);
       setError(null);
       
-      console.log(`Fetching users: search="${search}", page=${page}, size=${size}`);
-      
       // Add timeout for request
       const response = (await Promise.race([
         userService.getUsers({ search, page, pageSize: size }),
@@ -110,8 +108,6 @@ export const useUserManagement = () => {
 
   // Pagination handlers
   const handlePageChange = (page: number) => {
-    console.log('handlePageChange called with page:', page);
-    console.log('Current pagination state:', pagination);
     if (page >= 1 && page <= pagination.totalPages) {
       // Directly call fetchUsers with new page instead of using useEffect
       fetchUsers(searchText, page, pagination.pageSize);

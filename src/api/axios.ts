@@ -2,7 +2,17 @@ import axios from 'axios';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import type { ApiResponse } from '../models/ApiResponse.tsx';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+// Get API URL from environment variable or use default (production)
+const apiUrl = import.meta.env.VITE_API_URL || 'https://fitpick-be.onrender.com';
+
+// Log the API URL being used (useful for debugging)
+console.log('API Base URL:', apiUrl);
+
+if (!import.meta.env.VITE_API_URL) {
+  console.warn('VITE_API_URL is not set in .env file. Using default production URL:', apiUrl);
+  console.warn('For local development, create a .env file with: VITE_API_URL=http://localhost:5000');
+}
+
 const api = axios.create({
   baseURL: apiUrl,
   headers: {

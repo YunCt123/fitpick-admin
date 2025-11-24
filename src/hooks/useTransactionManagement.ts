@@ -68,8 +68,6 @@ export const useTransactionManagement = () => {
       setLoading(true);
       setError(null);
       
-      console.log(`Fetching transactions: search="${search}", page=${page}, size=${size}, status=${status}, dateRange=${dateRange}, userId=${userId}`);
-      
       // Add timeout for request
       const response = (await Promise.race([
         transactionService.getTransactions({ search, page, pageSize: size, status, userId, dateRange }),

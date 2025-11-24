@@ -72,8 +72,6 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, isVisible, onClose, onUse
         userData.append("city", values.city);
       }
 
-      console.log('Updating user with ID:', user.userid);
-      
       await userService.updateUser(user.userid.toString(), userData);
       
       toast.success('User updated successfully!');

@@ -113,8 +113,6 @@ const CreateMeal: React.FC<CreateMealProps> = ({ visible, onClose, onSuccess }) 
           }));
       }
 
-      console.log('Creating meal with data:', mealData);
-      
       const response = await mealService.createMeal(mealData);
       
       if (response.success && response.data) {

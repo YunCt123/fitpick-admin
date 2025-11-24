@@ -6,7 +6,7 @@ const DashboardHome: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     revenue: 0,
-    orders: 0,
+    transactions: 0,
     products: 0
   });
   const [loading, setLoading] = useState(true);
@@ -100,12 +100,12 @@ const DashboardHome: React.FC = () => {
         </div>
         
         <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">Orders</h3>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">Transactions</h3>
           {loading ? (
             <div className="h-9 w-24 bg-gray-200 animate-pulse rounded"></div>
           ) : (
             <p className="text-3xl font-bold text-purple-600">
-              {formatNumber(stats.orders)}
+              {formatNumber(stats.transactions)}
             </p>
           )}
         </div>

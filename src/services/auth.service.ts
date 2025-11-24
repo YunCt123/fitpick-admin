@@ -20,15 +20,11 @@ class AuthService {
    */
   async login(credentials: LoginRequest, rememberMe?: boolean): Promise<LoginResponseData> {
     try {
-      console.log('Attempting login with:', credentials);
-      console.log('Login URL:', `${AUTH_URL}/login`);
-      
       const response = await apiUtils.post<ApiResponse<LoginResponseData>>(
         `${AUTH_URL}/login`,
         credentials
       );
 
-      console.log('Login response:', response.data);
       const loginData = response.data.data;
       
       // Check if user has admin role (roleId = 4 according to getRoleName function)
@@ -42,8 +38,10 @@ class AuthService {
       // Handle remember me functionality
       if (rememberMe) {
         this.setRememberMeData(credentials.email);
+        localStorage.setItem(this.REMEMBER_ME_KEY, 'true');
       } else {
-        this.clearRememberMeData();
+        // Chỉ xóa remember me flag, giữ lại email để user tiện lần sau
+        this.clearRememberMeData(false);
       }
       
       return loginData;
@@ -297,13 +295,16 @@ class AuthService {
 
   /**
    * Clear Remember Me data from localStorage
+   * @param clearEmail - Whether to also clear the remembered email (default: false to keep email for convenience)
    */
-  clearRememberMeData(): void {
-    localStorage.removeItem(this.REMEMBERED_EMAIL_KEY);
+  clearRememberMeData(clearEmail: boolean = false): void {
     localStorage.removeItem(this.REMEMBER_ME_KEY);
-    // Remove old password storage for security
-    localStorage.removeItem('rememberedEmail');
-    localStorage.removeItem('rememberedPassword');
+    if (clearEmail) {
+      localStorage.removeItem(this.REMEMBERED_EMAIL_KEY);
+      // Remove old password storage for security
+      localStorage.removeItem('rememberedEmail');
+      localStorage.removeItem('rememberedPassword');
+    }
   }
 
   /**

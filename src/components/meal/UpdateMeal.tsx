@@ -50,53 +50,92 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
     
     try {
       setInitialLoading(true);
-      // Fetch full meal data including instructions and ingredients
-      const response = await mealService.getMealById(meal.mealid);
-      const fullMeal = response.data;
+      
+      // Get basic meal data from AdminMeal endpoint for IDs (categoryId, statusId)
+      const basicMealResponse = await mealService.getMealById(meal.mealid);
+      const basicMeal = basicMealResponse.data;
+      
+      // Get full meal detail from MealDetail endpoint for Instructions and Ingredients
+      // The AdminMeal endpoint returns Meal entity with JsonIgnore on Mealingredients, 
+      // so we need to use MealDetail endpoint to get ingredients and instructions
+      const mealDetailResponse = await apiUtils.get<ApiResponse<any>>(`/api/MealDetail/${meal.mealid}`);
+      const mealDetail = mealDetailResponse.data?.data || mealDetailResponse.data;
       
       // Pre-fill form with meal data
+      // Use basicMeal for IDs and mealDetail for Instructions/Ingredients
       const formValues: any = {
-        name: fullMeal.name,
-        description: fullMeal.description || '',
-        calories: fullMeal.calories,
-        cookingtime: fullMeal.cookingtime,
-        categoryId: fullMeal.categoryId,
-        diettype: fullMeal.diettype,
-        isPremium: fullMeal.isPremium || false,
-        statusId: fullMeal.statusId,
-        protein: fullMeal.protein,
-        carbs: fullMeal.carbs,
-        fat: fullMeal.fat,
+        name: basicMeal.name || mealDetail?.name || mealDetail?.Name,
+        description: basicMeal.description || mealDetail?.description || mealDetail?.Description || '',
+        calories: basicMeal.calories || mealDetail?.calories || mealDetail?.Calories,
+        cookingtime: basicMeal.cookingtime || mealDetail?.cookingtime || mealDetail?.Cookingtime,
+        categoryId: basicMeal.categoryId || meal.categoryId, // Use from basicMeal or props
+        diettype: basicMeal.diettype || mealDetail?.diettype || mealDetail?.Diettype,
+        isPremium: basicMeal.isPremium !== undefined ? basicMeal.isPremium : (mealDetail?.isPremium !== undefined ? mealDetail.isPremium : mealDetail?.IsPremium || false),
+        statusId: basicMeal.statusId || meal.statusId, // Use from basicMeal or props
+        protein: basicMeal.protein || mealDetail?.protein || mealDetail?.Protein,
+        carbs: basicMeal.carbs || mealDetail?.carbs || mealDetail?.Carbs,
+        fat: basicMeal.fat || mealDetail?.fat || mealDetail?.Fat,
       };
 
-      // Pre-fill instructions
-      if (fullMeal.mealInstructions && fullMeal.mealInstructions.length > 0) {
-        formValues.instructions = fullMeal.mealInstructions
-          .sort((a: any, b: any) => (a.stepNumber || 0) - (b.stepNumber || 0))
-          .map((inst: any) => inst.instruction || inst.instructionText);
+      // MealDetailDto has Instructions as List<MealInstructionDto> with properties: MealId, StepNumber, Instruction
+      // Backend is configured with JsonNamingPolicy.CamelCase, so "Instructions" becomes "instructions"
+      // and "Instruction" becomes "instruction"
+      let instructions: any[] = [];
+      if (mealDetail?.instructions && Array.isArray(mealDetail.instructions) && mealDetail.instructions.length > 0) {
+        instructions = mealDetail.instructions;
+      } else if (mealDetail?.Instructions && Array.isArray(mealDetail.Instructions) && mealDetail.Instructions.length > 0) {
+        instructions = mealDetail.Instructions;
+      }
+      
+      if (instructions && instructions.length > 0) {
+        // Instructions are already sorted by StepNumber from backend, but sort again to be safe
+        formValues.instructions = instructions
+          .sort((a: any, b: any) => {
+            // Backend serializes as camelCase, so check stepNumber first
+            const stepA = a.stepNumber || a.StepNumber || a.step_number || 0;
+            const stepB = b.stepNumber || b.StepNumber || b.step_number || 0;
+            return stepA - stepB;
+          })
+          .map((inst: any) => {
+            // Backend serializes as camelCase, so check "instruction" first
+            return inst.instruction || inst.Instruction || inst.instructionText || inst.InstructionText || inst.text || inst.Text || '';
+          })
+          .filter((inst: string) => inst && inst.trim().length > 0); // Filter out empty strings
       } else {
         formValues.instructions = [];
       }
 
-      // Pre-fill ingredients
-      // Backend uses camelCase JSON serialization, so property is 'mealIngredients'
-      const mealIngredients = fullMeal.mealIngredients || (fullMeal as any).mealingredients;
-      if (mealIngredients && Array.isArray(mealIngredients) && mealIngredients.length > 0) {
-        formValues.ingredients = mealIngredients.map((ing: any) => ({
-          ingredientId: ing.ingredientid || ing.ingredientId || ing.ingredient?.ingredientid || ing.ingredient?.ingredientId,
-          quantity: ing.quantity
-        }));
+      // MealDetailDto has Ingredients as List<MealIngredientDetailDto> with properties: IngredientId, IngredientName, Quantity, Unit
+      let mealIngredients: any[] = [];
+      if (mealDetail?.ingredients && Array.isArray(mealDetail.ingredients) && mealDetail.ingredients.length > 0) {
+        mealIngredients = mealDetail.ingredients;
+      } else if (mealDetail?.Ingredients && Array.isArray(mealDetail.Ingredients)) {
+        mealIngredients = mealDetail.Ingredients;
+      }
+      
+      if (mealIngredients.length > 0) {
+        formValues.ingredients = mealIngredients.map((ing: any) => {
+          // MealIngredientDetailDto has: IngredientId, Quantity
+          const ingredientId = ing.ingredientId || ing.IngredientId || ing.ingredientid || ing.Ingredientid;
+          const quantity = ing.quantity || ing.Quantity;
+          
+          return {
+            ingredientId: ingredientId ? Number(ingredientId) : null,
+            quantity: quantity ? Number(quantity) : 0
+          };
+        }).filter((ing: any) => ing.ingredientId && ing.quantity > 0);
       } else {
         formValues.ingredients = [];
       }
 
       // Pre-fill image if exists
-      if (fullMeal.imageUrl) {
+      const imageUrl = basicMeal.imageUrl || mealDetail?.imageUrl || mealDetail?.ImageUrl;
+      if (imageUrl) {
         formValues.image = [{
           uid: '-1',
           name: 'current-image.jpg',
           status: 'done',
-          url: fullMeal.imageUrl
+          url: imageUrl
         }];
       }
 
@@ -231,8 +270,6 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
           }));
       }
 
-      console.log('Updating meal with data:', mealData);
-      
       const response = await mealService.updateMeal(meal.mealid, mealData);
       
       if (response.success && response.data) {
