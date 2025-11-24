@@ -7,10 +7,10 @@ const DownloadApp = () => {
   const [copied, setCopied] = useState(false);
 
   // Link Expo để tải ứng dụng
-  const expoUrl = "exp://expo.dev/@fitpick/app"; // Có thể cập nhật sau với link thực tế
+  const expoUrl = "https://drive.google.com/drive/u/1/folders/1wY-JGGuBU_uOm51d_a_xIjb_72MQW61_"; // Có thể cập nhật sau với link thực tế
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(expoUrl);
+    navigator.clipboard.writeText(expoUrl);   
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -61,7 +61,7 @@ const DownloadApp = () => {
               className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2 mx-auto"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="https://drive.google.com/drive/u/1/folders/1wY-JGGuBU_uOm51d_a_xIjb_72MQW61_" />
               </svg>
               {copied ? "Đã sao chép!" : "Sao chép link tải"}
             </button>
