@@ -3,6 +3,7 @@ import { authService } from '../services/auth.service';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logoWeb from '../assets/FitPick-logo.png';
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,15 +35,19 @@ const Login: React.FC = () => {
         }
 
         // If session restoration failed, load remembered email if available
+        // Load email even if remember me is not enabled (for convenience)
         const rememberedEmail = authService.getRememberedEmail();
         const isRememberMeEnabled = authService.isRememberMeEnabled();
         
-        if (rememberedEmail && isRememberMeEnabled) {
+        if (rememberedEmail) {
           setFormData({
             email: rememberedEmail,
             password: ''
           });
-          setRememberMe(true);
+          // Only check remember me if it was previously enabled
+          if (isRememberMeEnabled) {
+            setRememberMe(true);
+          }
         }
       } catch (error) {
         console.error('Login initialization error:', error);
@@ -68,9 +74,17 @@ const Login: React.FC = () => {
     const checked = e.target.checked;
     setRememberMe(checked);
     
-    // Nếu bỏ tick Remember Me, xóa thông tin đã lưu
+    // Nếu bỏ tick Remember Me, chỉ xóa remember me flag
+    // Nhưng giữ lại email nếu đã có để user dễ dàng nhập lại
     if (!checked) {
-      authService.clearRememberMeData();
+      // Chỉ xóa remember me flag, không xóa email
+      localStorage.removeItem('rememberMe');
+    } else {
+      // Nếu tick Remember Me, lưu email hiện tại
+      if (formData.email) {
+        localStorage.setItem('rememberedEmail', formData.email);
+        localStorage.setItem('rememberMe', 'true');
+      }
     }
   };
 
@@ -284,9 +298,13 @@ const Login: React.FC = () => {
                 />
                 <span className="ml-2 text-gray-600">Remember me</span>
               </label>
-              <a href="#" className="text-purple-600 hover:text-purple-700 font-medium">
+              <button
+                type="button"
+                onClick={() => setShowForgotPasswordModal(true)}
+                className="text-purple-600 hover:text-purple-700 font-medium focus:outline-none"
+              >
                 Forgot password?
-              </a>
+              </button>
             </div>
 
             {/* Login Button */}
@@ -310,6 +328,12 @@ const Login: React.FC = () => {
           </form>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal 
+        isOpen={showForgotPasswordModal} 
+        onClose={() => setShowForgotPasswordModal(false)} 
+      />
     </div>
   );
 };

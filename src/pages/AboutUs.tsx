@@ -14,8 +14,8 @@ const AboutUs = () => {
             Về <span className="text-purple-600">FitPick</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Chúng tôi có sứ mệnh làm cho fitness trở nên dễ tiếp cận, được cá nhân hóa và thú vị cho mọi người. 
-            Tìm hiểu thêm về câu chuyện, giá trị và đội ngũ đằng sau FitPick.
+            Chúng tôi có sứ mệnh làm cho dinh dưỡng trở nên dễ tiếp cận, được cá nhân hóa và hiệu quả cho mọi người. 
+            Tìm hiểu thêm về câu chuyện và giá trị đằng sau FitPick.
           </p>
         </div>
       </div>
@@ -28,13 +28,13 @@ const AboutUs = () => {
               Sứ Mệnh Của Chúng Tôi
             </h2>
             <p className="text-lg text-gray-600 mb-6">
-              Tại FitPick, chúng tôi tin rằng mọi người đều xứng đáng được tiếp cận với hướng dẫn fitness và dinh dưỡng được cá nhân hóa. 
-              Sứ mệnh của chúng tôi là dân chủ hóa sức khỏe và thể chất bằng cách cung cấp các giải pháp thông minh, dựa trên dữ liệu 
-              thích ứng với nhu cầu và lối sống độc đáo của từng cá nhân.
+              Tại FitPick, chúng tôi tin rằng mọi người đều xứng đáng được tiếp cận với hướng dẫn dinh dưỡng được cá nhân hóa. 
+              Sứ mệnh của chúng tôi là giúp mọi người quản lý dinh dưỡng một cách dễ dàng và hiệu quả bằng cách cung cấp các giải pháp thông minh, 
+              dựa trên dữ liệu thích ứng với nhu cầu và lối sống độc đáo của từng cá nhân.
             </p>
             <p className="text-lg text-gray-600">
               Chúng tôi kết hợp công nghệ tiên tiến với khoa học dinh dưỡng dựa trên bằng chứng để tạo ra các kế hoạch ăn uống 
-              và chương trình fitness thực sự hoạt động cho những người thực với cuộc sống thực.
+              thực sự phù hợp và hiệu quả cho cuộc sống hàng ngày của bạn.
             </p>
           </div>
           <div className="bg-gradient-to-r from-purple-100 to-blue-100 p-8 rounded-lg">
@@ -44,9 +44,9 @@ const AboutUs = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Trao Quyền Cho Cuộc Sống Khỏe Mạnh</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Được Người Dùng Tin Tưởng</h3>
               <p className="text-gray-600">
-                Hơn 10,000+ người dùng đã thay đổi cuộc sống của họ với phương pháp fitness và dinh dưỡng được cá nhân hóa của FitPick.
+                Gần 100 người dùng đã tin tưởng và sử dụng FitPick. Hơn 50 người dùng đánh giá app phù hợp và hữu ích cho nhu cầu dinh dưỡng của họ.
               </p>
             </div>
           </div>
@@ -74,8 +74,7 @@ const AboutUs = () => {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Đổi Mới</h3>
               <p className="text-gray-600">
-                Chúng tôi không ngừng mở rộng ranh giới của những gì có thể làm được trong công nghệ fitness, 
-                mang đến cho bạn những tiến bộ mới nhất trong các giải pháp sức khỏe cá nhân hóa.
+                Chúng tôi không ngừng cải thiện và phát triển ứng dụng, mang đến cho bạn những tính năng mới nhất trong quản lý dinh dưỡng cá nhân hóa.
               </p>
             </div>
 
@@ -87,125 +86,21 @@ const AboutUs = () => {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Chân Thực</h3>
               <p className="text-gray-600">
-                Chúng tôi cung cấp những khuyến nghị trung thực, dựa trên bằng chứng mà không có mánh khóe hay lời hứa sai lệch. 
-                Hành trình sức khỏe của bạn xứng đáng có được sự thật.
+                Chúng tôi cung cấp những khuyến nghị trung thực, dựa trên bằng chứng khoa học mà không có mánh khóe hay lời hứa sai lệch. 
+                Hành trình dinh dưỡng của bạn xứng đáng có được sự thật.
               </p>
             </div>
 
             <div className="text-center p-6">
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Cộng Đồng</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Hiệu Quả</h3>
               <p className="text-gray-600">
-                Chúng tôi tin vào sức mạnh của sự hỗ trợ cộng đồng. Cùng nhau, chúng ta có thể đạt được nhiều hơn bất cứ điều gì một mình có thể làm được.
+                Chúng tôi tập trung vào kết quả thực tế. Hơn 50% người dùng đánh giá FitPick phù hợp và hữu ích cho việc quản lý dinh dưỡng của họ.
               </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Team Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Gặp Gỡ Đội Ngũ Của Chúng Tôi
-          </h2>
-          <p className="text-lg text-gray-600">
-            Những cá nhân đầy nhiệt huyết đằng sau thành công của FitPick
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="w-32 h-32 bg-gradient-to-r from-green-400 to-green-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">H</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Huynh Ngoc Ky</h3>
-            <p className="text-purple-600 mb-3">Trưởng nhóm</p>
-            <p className="text-gray-600">
-              Lãnh đạo dự án với tầm nhìn chiến lược và kinh nghiệm quản lý sản phẩm công nghệ sức khỏe.
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-32 h-32 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">H</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Huynh Ngoc Khanh Nguyen</h3>
-            <p className="text-purple-600 mb-3">Thành viên</p>
-            <p className="text-gray-600">
-              Chuyên gia phát triển ứng dụng mobile với đam mê tạo ra trải nghiệm người dùng tuyệt vời.
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-32 h-32 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">P</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Phan Lam Khanh</h3>
-            <p className="text-purple-600 mb-3">Thành viên</p>
-            <p className="text-gray-600">
-              Chuyên gia UI/UX với kỹ năng thiết kế giao diện người dùng trực quan và thân thiện.
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-32 h-32 bg-gradient-to-r from-teal-400 to-teal-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">T</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Trinh Duc Anh</h3>
-            <p className="text-purple-600 mb-3">Thành viên</p>
-            <p className="text-gray-600">
-              Lập trình viên backend với chuyên môn về xây dựng hệ thống và tối ưu hiệu suất ứng dụng.
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-32 h-32 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">N</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Nguyen Cao Thanh Ngan</h3>
-            <p className="text-purple-600 mb-3">Thành viên</p>
-            <p className="text-gray-600">
-              Chuyên gia phân tích dữ liệu và AI, tập trung vào việc phát triển thuật toán cá nhân hóa dinh dưỡng.
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-32 h-32 bg-gradient-to-r from-red-400 to-red-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">T</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Tran Thi Thanh Trang</h3>
-            <p className="text-purple-600 mb-3">Thành viên</p>
-            <p className="text-gray-600">
-              Chuyên gia kiểm thử chất lượng và đảm bảo trải nghiệm người dùng ổn định và mượt mà.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="bg-purple-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-white mb-2">10K+</div>
-              <div className="text-purple-200">Người Dùng Hoạt Động</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-white mb-2">50K+</div>
-              <div className="text-purple-200">Bữa Ăn Được Lập Kế Hoạch</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-white mb-2">95%</div>
-              <div className="text-purple-200">Sự Hài Lòng Của Người Dùng</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-white mb-2">24/7</div>
-              <div className="text-purple-200">Hỗ Trợ Có Sẵn</div>
             </div>
           </div>
         </div>
@@ -228,7 +123,7 @@ const AboutUs = () => {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Email</h3>
-              <p className="text-gray-600">support@fitpick.com</p>
+              <p className="text-gray-600">fitpick25.app@gmail.com</p>
             </div>
             <div className="text-center">
               <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -237,7 +132,7 @@ const AboutUs = () => {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Điện Thoại</h3>
-              <p className="text-gray-600">+84 123 456 789</p>
+              <p className="text-gray-600">+84 819260507</p>
             </div>
             <div className="text-center">
               <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -260,7 +155,8 @@ const AboutUs = () => {
             Sẵn Sàng Bắt Đầu Hành Trình?
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Tham gia cùng hàng nghìn người dùng đã thay đổi cuộc sống của họ với FitPick.
+            Tham gia cùng gần 100 người dùng đang sử dụng FitPick để quản lý dinh dưỡng hàng ngày. 
+            Hơn 50 người dùng đánh giá app phù hợp và hữu ích cho bản thân.
           </p>
           <Link
             to="/download"

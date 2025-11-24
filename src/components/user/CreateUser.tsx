@@ -44,8 +44,6 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
         return;
       }
       
-      console.log('Form values received:', values);
-      
       // Map to backend API format (PascalCase)
       const userData: Record<string, any> = {
         FullName: values.fullName?.trim(),
@@ -74,7 +72,6 @@ const CreateUser: React.FC<CreateUserProps> = ({ visible, onClose, onSuccess }) 
         userData.Weight = Number(values.weight);
       }
 
-      console.log('User JSON payload to send:', userData);
       await userService.createUser(userData);
       
       toast.success('User created successfully!');

@@ -111,7 +111,7 @@ const ManageUser: React.FC = () => {
       </div>
 
       {/* User Statistics */}
-      <UserStats users={filteredUsers} loading={loading} />
+      <UserStats users={filteredUsers} totalItems={pagination.totalItems} loading={loading} />
 
       {/* Search Component */}
       <UserSearch onSearch={handleSearch} loading={loading} />

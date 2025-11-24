@@ -23,14 +23,12 @@ const UserPagination: React.FC<UserPaginationProps> = ({
 }) => {
   const handlePrevPage = () => {
     if (pagination.current > 1) {
-      console.log('Going to previous page:', pagination.current - 1);
       onPageChange(pagination.current - 1);
     }
   };
 
   const handleNextPage = () => {
     if (pagination.current < pagination.totalPages) {
-      console.log('Going to next page:', pagination.current + 1);
       onPageChange(pagination.current + 1);
     }
   };
