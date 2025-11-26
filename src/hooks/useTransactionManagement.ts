@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { debounce } from 'lodash';
 import { toast } from 'react-toastify';
 import { transactionService } from '../services/transaction.service';
@@ -28,45 +28,40 @@ export const useTransactionManagement = () => {
     totalPages: 0
   });
 
-  // Calculate stats using useMemo to avoid unnecessary recalculations
-  const stats = useMemo(() => {
-    if (filteredTransactions.length === 0) {
-      return {
-        total: 0,
-        completed: 0,
-        pending: 0,
-        failed: 0,
-        totalAmount: 0
-      };
+  // Stats state - fetched separately from API
+  const [stats, setStats] = useState({
+    total: 0,
+    completed: 0,
+    pending: 0,
+    failed: 0,
+    totalAmount: 0
+  });
+
+  // Fetch stats from API
+  const fetchStats = useCallback(async (status?: string, dateRange?: string) => {
+    try {
+      const response = await transactionService.getTransactionStats({
+        status,
+        dateRange
+      });
+      
+      if (response.success && response.data) {
+        setStats(response.data);
+      }
+    } catch (err: any) {
+      console.error("Error fetching transaction stats:", err);
+      // Keep existing stats on error
     }
-
-    const total = filteredTransactions.length;
-    const completed = filteredTransactions.filter(t => 
-      t.status?.toUpperCase() === 'PAID'
-    ).length;
-    const pending = filteredTransactions.filter(t => 
-      t.status?.toUpperCase() === 'PENDING'
-    ).length;
-    const failed = 0; // No failed status in new system
-    
-    const totalAmount = filteredTransactions
-      .filter(t => t.status?.toUpperCase() === 'PAID')
-      .reduce((sum, t) => sum + (t.amount || 0), 0);
-
-    return {
-      total,
-      completed,
-      pending,
-      failed,
-      totalAmount
-    };
-  }, [filteredTransactions]);
+  }, []);
 
   // Fetch transactions from API
   const fetchTransactions = useCallback(async (search: string = "", page: number = 1, size: number = 10, status?: string, dateRange?: string, userId?: number) => {
     try {
       setLoading(true);
       setError(null);
+      
+      // Fetch stats in parallel with transactions
+      fetchStats(status, dateRange);
       
       // Add timeout for request
       const response = (await Promise.race([
@@ -105,7 +100,7 @@ export const useTransactionManagement = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [fetchStats]);
 
   // Update transaction status
   const updateTransactionStatus = useCallback(async (id: string | number, status: 'PENDING' | 'PAID') => {

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Clock, DollarSign, Users, Star } from 'lucide-react';
+import { Clock, Users, Star } from 'lucide-react';
 import StatsGrid, { type StatCard } from '../ui/StatsGrid';
 
 interface MealStats {
   total: number;
   premium: number;
-  averagePrice: number;
   averageCookingTime: number;
 }
 
@@ -15,13 +14,6 @@ interface MealStatsProps {
 }
 
 const MealStats: React.FC<MealStatsProps> = ({ stats, loading }) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
   const statCards: StatCard[] = [
     {
       label: 'Total Meals',
@@ -36,13 +28,6 @@ const MealStats: React.FC<MealStatsProps> = ({ stats, loading }) => {
       icon: Star,
       bgColor: 'bg-yellow-100',
       iconColor: 'text-yellow-600',
-    },
-    {
-      label: 'Average Price',
-      value: formatPrice(stats.averagePrice),
-      icon: DollarSign,
-      bgColor: 'bg-green-100',
-      iconColor: 'text-green-600',
     },
     {
       label: 'Avg Cooking Time',

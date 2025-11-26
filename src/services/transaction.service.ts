@@ -90,4 +90,45 @@ export const transactionService = {
 		const response = await apiUtils.delete<ApiResponse<null>>(`${TRANSACTIONS}/${id}`, config);
 		return response.data;
 	},
+
+	// Lấy thống kê transactions
+	getTransactionStats: async (params?: {
+		status?: string;
+		userId?: number;
+		dateRange?: string;
+	}, config = {}): Promise<ApiResponse<{
+		total: number;
+		completed: number;
+		pending: number;
+		failed: number;
+		totalAmount: number;
+	}>> => {
+		// Fetch all transactions and calculate stats
+		const allTransactions = await transactionService.getTransactions({
+			page: 1,
+			pageSize: 9999, // Get all transactions
+			...params
+		}, config);
+
+		let transactions: PaymentResponse[] = [];
+		if (allTransactions.data?.items) {
+			transactions = allTransactions.data.items;
+		} else if (Array.isArray(allTransactions.data)) {
+			transactions = allTransactions.data;
+		}
+
+		const total = transactions.length;
+		const completed = transactions.filter(t => t.status?.toUpperCase() === 'PAID').length;
+		const pending = transactions.filter(t => t.status?.toUpperCase() === 'PENDING').length;
+		const failed = 0;
+		const totalAmount = transactions
+			.filter(t => t.status?.toUpperCase() === 'PAID')
+			.reduce((sum, t) => sum + (t.amount || 0), 0);
+
+		return {
+			success: true,
+			data: { total, completed, pending, failed, totalAmount },
+			message: 'Stats calculated from transactions'
+		};
+	},
 };

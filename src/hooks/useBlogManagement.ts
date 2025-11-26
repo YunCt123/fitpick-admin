@@ -59,6 +59,54 @@ interface BlogFilters {
   limit: number;
 }
 
+// Hook for blog stats
+export const useBlogStats = () => {
+  const [stats, setStats] = useState({
+    total: 0,
+    published: 0,
+    draft: 0,
+    totalViews: 0
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await blogService.getBlogStats();
+      
+      if (response.success && response.data) {
+        setStats(response.data);
+      }
+    } catch (err: any) {
+      console.error('Error fetching blog stats:', err);
+      setError(err.message || 'Failed to fetch blog statistics');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  return {
+    stats,
+    loading,
+    error,
+    refetch: fetchStats
+  };
+};
+
+interface BlogFilters {
+  search: string;
+  category: number | null;
+  status: boolean | null;
+  page: number;
+  limit: number;
+}
+
 export const useBlogManagement = (): UseBlogManagementReturn => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(false);

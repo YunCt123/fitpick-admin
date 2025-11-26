@@ -27,11 +27,40 @@ const Ingredients: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
 
+  // Stats state - fetched separately from API
+  const [ingredientStats, setIngredientStats] = useState({
+    total: 0,
+    active: 0,
+    inactive: 0,
+    totalTypes: 0
+  });
+
+  // Fetch stats from API
+  const fetchStats = useCallback(async () => {
+    try {
+      const status = statusFilter === 'active' ? true : statusFilter === 'inactive' ? false : undefined;
+      const response = await ingredientService.getIngredientStats({
+        type: typeFilter !== 'all' ? typeFilter : undefined,
+        status: status
+      });
+      
+      if (response.success && response.data) {
+        setIngredientStats(response.data);
+      }
+    } catch (err: any) {
+      console.error("Error fetching ingredient stats:", err);
+      // Keep existing stats on error
+    }
+  }, [typeFilter, statusFilter]);
+
   // Fetch ingredients with pagination
   const fetchIngredients = useCallback(async (page: number) => {
     setLoading(true);
     setError(null);
     try {
+      // Fetch stats in parallel with ingredients
+      fetchStats();
+      
       const status = statusFilter === 'active' ? true : statusFilter === 'inactive' ? false : undefined;
       const response = await ingredientService.getAllIngredients({
         name: searchTerm || undefined,
@@ -59,7 +88,7 @@ const Ingredients: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [searchTerm, typeFilter, statusFilter, pageSize]);
+  }, [searchTerm, typeFilter, statusFilter, pageSize, fetchStats]);
 
   // Fetch when filters change (reset to page 1)
   useEffect(() => {
@@ -73,21 +102,6 @@ const Ingredients: React.FC = () => {
       fetchIngredients(currentPage);
     }
   }, [currentPage, fetchIngredients]);
-
-  // Calculate ingredient stats (use totalItems if available, otherwise use current ingredients)
-  const ingredientStats = useMemo(() => {
-    // For stats, we might need to fetch total separately, but for now use current data
-    const active = ingredients.filter(ing => ing.status === true);
-    const inactive = ingredients.filter(ing => ing.status === false);
-    const types = new Set(ingredients.map(ing => ing.type).filter(Boolean));
-    
-    return {
-      total: totalItems > 0 ? totalItems : ingredients.length,
-      active: active.length, // This is only for current page, total would need separate query
-      inactive: inactive.length,
-      totalTypes: types.size
-    };
-  }, [ingredients, totalItems]);
 
   // Handlers
   const handleSearch = (e: React.FormEvent) => {

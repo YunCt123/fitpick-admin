@@ -95,4 +95,39 @@ export const userService = {
 		);
 		return response.data;
 	},
+
+	// Lấy thống kê users
+	getUserStats: async (params?: {
+		genderId?: number;
+		roleId?: number;
+		status?: boolean;
+	}, config = {}): Promise<ApiResponse<{
+		total: number;
+		active: number;
+		inactive: number;
+	}>> => {
+		// Fetch all users and calculate stats
+		const allUsers = await userService.getUsers({
+			page: 1,
+			pageSize: 9999, // Get all users
+			...params
+		}, config);
+
+		let users: User[] = [];
+		if (allUsers.data?.items) {
+			users = allUsers.data.items;
+		} else if (Array.isArray(allUsers.data)) {
+			users = allUsers.data;
+		}
+
+		const total = users.length;
+		const active = users.filter(u => u.status === true).length;
+		const inactive = users.filter(u => u.status === false).length;
+
+		return {
+			success: true,
+			data: { total, active, inactive },
+			message: 'Stats calculated from users'
+		};
+	},
 };

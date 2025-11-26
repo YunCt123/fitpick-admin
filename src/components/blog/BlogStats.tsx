@@ -6,7 +6,7 @@ interface BlogStats {
   total: number;
   published: number;
   draft: number;  
-  averageReadingTime: number;
+  averageReadingTime?: number;
   totalViews?: number;
   growthRate?: number;
 }
@@ -41,7 +41,7 @@ const BlogStats: React.FC<BlogStatsProps> = ({ stats, loading }) => {
     },
     {
       label: 'Avg Reading Time',
-      value: `${Math.round(stats.averageReadingTime)} mins`,
+      value: `${Math.round(stats.averageReadingTime || 0)} mins`,
       icon: Clock,
       bgColor: 'bg-purple-100',
       iconColor: 'text-purple-600'

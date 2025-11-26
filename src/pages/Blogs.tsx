@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Search } from 'lucide-react';
-import { useBlogManagement } from '../hooks/useBlogManagement';
+import { useBlogManagement, useBlogStats } from '../hooks/useBlogManagement';
 import { BlogTable, CreateBlog, UpdateBlog, BlogDetails, BlogStats, DeleteBlog } from '../components/blog';
 import type { Blog } from '../models/BlogModel';
 
@@ -24,7 +24,6 @@ const BlogsNew: React.FC = () => {
     error,
     totalPages,
     currentPage,
-    totalBlogs,
     fetchBlogs,
     createBlog,
     updateBlog,
@@ -34,6 +33,9 @@ const BlogsNew: React.FC = () => {
     setPage,
     clearError
   } = useBlogManagement();
+
+  // Hook for blog stats
+  const { stats: blogStats, loading: statsLoading } = useBlogStats();
 
   // UI State
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,27 +56,6 @@ const BlogsNew: React.FC = () => {
     { id: 4, name: 'Công thức' },
     { id: 5, name: 'Lifestyle' }
   ];
-
-  // Calculate blog stats
-  const blogStats = useMemo(() => {
-    const published = blogs.filter(blog => blog.status === true);
-    const draft = blogs.filter(blog => blog.status === false);
-    
-    // Calculate average reading time (estimate: 200 words per minute)
-    const avgReadingTime = blogs.length > 0 
-      ? blogs.reduce((sum, blog) => {
-          const wordCount = blog.content ? blog.content.split(' ').length : 0;
-          return sum + (wordCount / 200);
-        }, 0) / blogs.length
-      : 0;
-
-    return {
-      total: totalBlogs || blogs.length,
-      published: published.length,
-      draft: draft.length,
-      averageReadingTime: avgReadingTime
-    };
-  }, [blogs, totalBlogs]);
 
   // Handlers
   const handleSearch = (e: React.FormEvent) => {
@@ -152,7 +133,7 @@ const BlogsNew: React.FC = () => {
       </div>
 
       {/* BlogStats */}
-      <BlogStats stats={blogStats} loading={loading} />
+      <BlogStats stats={blogStats} loading={statsLoading} />
 
       {/* Error Display */}
       {error && (
