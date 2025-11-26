@@ -91,6 +91,41 @@ export const ingredientService = {
   },
 
   /**
+   * Get ingredient statistics
+   */
+  getIngredientStats: async (params?: {
+    type?: string;
+    status?: boolean;
+  }): Promise<ApiResponse<{
+    total: number;
+    active: number;
+    inactive: number;
+    totalTypes: number;
+  }>> => {
+    // Fetch all ingredients and calculate stats
+    const allIngredients = await ingredientService.getAllIngredients({
+      type: params?.type,
+      status: params?.status
+    });
+
+    let ingredients: Ingredient[] = [];
+    if (Array.isArray(allIngredients.data)) {
+      ingredients = allIngredients.data;
+    }
+
+    const total = ingredients.length;
+    const active = ingredients.filter(ing => ing.status === true).length;
+    const inactive = ingredients.filter(ing => ing.status === false).length;
+    const types = new Set(ingredients.map(ing => ing.type).filter(Boolean));
+
+    return {
+      success: true,
+      data: { total, active, inactive, totalTypes: types.size },
+      message: 'Stats calculated from ingredients'
+    };
+  },
+
+  /**
    * Update ingredient
    */
   updateIngredient: async (id: number, data: UpdateIngredientRequest): Promise<ApiResponse<Ingredient>> => {
