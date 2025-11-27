@@ -7,7 +7,7 @@ const DownloadApp = () => {
   const [copied, setCopied] = useState(false);
 
   // Link Expo để tải ứng dụng
-  const expoUrl = "https://drive.google.com/drive/u/1/folders/1wY-JGGuBU_uOm51d_a_xIjb_72MQW61_"; // Có thể cập nhật sau với link thực tế
+  const expoUrl = "https://drive.google.com/file/d/1w8toEzOd0weGusRNDqaAUXNuW2yfVzZn/view?usp=sharing"; // Có thể cập nhật sau với link thực tế
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(expoUrl);   
