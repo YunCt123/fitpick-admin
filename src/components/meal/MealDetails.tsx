@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Row, Col, Typography, Divider, Tag, Button } from 'antd';
 import { 
   ClockCircleOutlined, 
-  DollarOutlined, 
   CalendarOutlined,
   UserOutlined,
   FireOutlined,
@@ -22,13 +21,6 @@ interface MealDetailsProps {
 
 const MealDetails: React.FC<MealDetailsProps> = ({ meal, visible, onClose, onEdit }) => {
   if (!meal) return null;
-
-  const formatPrice = (price: number): string => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -162,7 +154,7 @@ const MealDetails: React.FC<MealDetailsProps> = ({ meal, visible, onClose, onEdi
             </div>
           </Col>
 
-          <Col xs={24} sm={8}>
+          <Col xs={24} sm={12}>
             <div style={{ 
               padding: '16px', 
               backgroundColor: '#fff2f0', 
@@ -187,7 +179,7 @@ const MealDetails: React.FC<MealDetailsProps> = ({ meal, visible, onClose, onEdi
             </div>
           </Col>
 
-          <Col xs={24} sm={8}>
+          <Col xs={24} sm={12}>
             <div style={{ 
               padding: '16px', 
               backgroundColor: '#e6f7ff', 
@@ -212,27 +204,6 @@ const MealDetails: React.FC<MealDetailsProps> = ({ meal, visible, onClose, onEdi
             </div>
           </Col>
 
-          <Col xs={24} sm={8}>
-            <div style={{ 
-              padding: '16px', 
-              backgroundColor: '#f6ffed', 
-              borderRadius: '8px',
-              border: '1px solid #b7eb8f',
-              height: '120px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
-                <DollarOutlined style={{ color: '#52c41a', marginRight: '8px' }} />
-                <Text strong>Price</Text>
-              </div>
-              <Text style={{ fontSize: '18px', fontWeight: 'bold', color: '#52c41a' }}>
-                {formatPrice(meal.price)}
-              </Text>
-            </div>
-          </Col>
         </Row>
 
         <Divider />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Input, Alert, Row, Col, Typography, Divider } from 'antd';
-import { DeleteOutlined, ExclamationCircleOutlined, ClockCircleOutlined, DollarOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ExclamationCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { mealService } from '../../services/meal.service';
 import type { Meal } from '../../models/MealModel';
 import { toast } from 'react-toastify';
@@ -61,13 +61,6 @@ const DeleteMeal: React.FC<DeleteMealProps> = ({ meal, isVisible, onClose, onMea
       case 'Non-Vegetarian': return '#fa541c';
       default: return '#8c8c8c';
     }
-  };
-
-  const formatPrice = (price: number): string => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
   };
 
   const formatDate = (dateString: string): string => {
@@ -182,15 +175,6 @@ const DeleteMeal: React.FC<DeleteMealProps> = ({ meal, isVisible, onClose, onMea
                 <div>
                   <Text strong>Calories: </Text>
                   <Text>{meal.calories} kcal</Text>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div>
-                  <DollarOutlined style={{ marginRight: '6px', color: '#52c41a' }} />
-                  <Text strong>Price: </Text>
-                  <Text style={{ color: '#52c41a', fontWeight: 'bold' }}>
-                    {formatPrice(meal.price)}
-                  </Text>
                 </div>
               </Col>
               <Col span={12}>
