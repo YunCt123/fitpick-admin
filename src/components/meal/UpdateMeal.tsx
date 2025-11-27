@@ -23,6 +23,7 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);
+  const [formInitialValues, setFormInitialValues] = useState<any>(null);
   const [ingredients, setIngredients] = useState<Array<{ ingredientid: number; name: string }>>([]);
   const [loadingIngredients, setLoadingIngredients] = useState(false);
   const [dietTypes, setDietTypes] = useState<string[]>([]);
@@ -40,8 +41,15 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
       fetchStatuses();
       
       if (meal) {
+        // Reset form and initial values when opening modal
+        form.resetFields();
+        setFormInitialValues(null);
         loadMealData();
       }
+    } else {
+      // Clear form when modal closes
+      form.resetFields();
+      setFormInitialValues(null);
     }
   }, [visible, meal]);
 
@@ -89,7 +97,7 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
       
       if (instructions && instructions.length > 0) {
         // Instructions are already sorted by StepNumber from backend, but sort again to be safe
-        formValues.instructions = instructions
+        const mappedInstructions = instructions
           .sort((a: any, b: any) => {
             // Backend serializes as camelCase, so check stepNumber first
             const stepA = a.stepNumber || a.StepNumber || a.step_number || 0;
@@ -101,6 +109,8 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
             return inst.instruction || inst.Instruction || inst.instructionText || inst.InstructionText || inst.text || inst.Text || '';
           })
           .filter((inst: string) => inst && inst.trim().length > 0); // Filter out empty strings
+        
+        formValues.instructions = mappedInstructions;
       } else {
         formValues.instructions = [];
       }
@@ -139,6 +149,10 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
         }];
       }
 
+      // Set initial values state for Form component
+      setFormInitialValues(formValues);
+      
+      // Also set fields value directly
       form.setFieldsValue(formValues);
     } catch (error) {
       console.error('Error loading meal data:', error);
@@ -306,6 +320,7 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
 
   const handleClose = () => {
     form.resetFields();
+    setFormInitialValues(null);
     onClose();
   };
 
@@ -334,6 +349,8 @@ const UpdateMeal: React.FC<UpdateMealProps> = ({ meal, visible, onClose, onSucce
           onFinish={handleSubmit}
           requiredMark={false}
           style={{ marginTop: '20px' }}
+          initialValues={formInitialValues || undefined}
+          key={formInitialValues ? JSON.stringify(formInitialValues.instructions) : 'empty'}
         >
           <Row gutter={[16, 0]}>
             <Col xs={24} sm={12}>

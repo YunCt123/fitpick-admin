@@ -25,13 +25,6 @@ const MealTable: React.FC<MealTableProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(price);
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('vi-VN');
   };
@@ -76,7 +69,7 @@ const MealTable: React.FC<MealTableProps> = ({
                 Type & Calories
               </th>
               <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
-                Price & Time
+                Cooking Time
               </th>
               <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Status
@@ -115,8 +108,7 @@ const MealTable: React.FC<MealTableProps> = ({
                 </td>
                 <td className="px-6 py-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{formatPrice(meal.price)}</p>
-                    <p className="text-sm text-gray-600 flex items-center gap-1 mt-1">
+                    <p className="text-sm text-gray-600 flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {meal.cookingtime} mins
                     </p>
